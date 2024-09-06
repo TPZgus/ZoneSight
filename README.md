@@ -63,6 +63,8 @@ This repository includes example files for testing:
 - `test.mp3`: A short sample audio file of a student reflecting on their experience in general.
 - `test.txt`: A sample competencies file
 - `test_report.html`: An example of the HTML report generated from the test audio file
+- `longer_test.mp3`: A longer sample audio file for more comprehensive testing.
+- `test_report.html`: An example of a longer HTML report generated from the longer test audio file.
 
 To run the script with these example files:
 
@@ -72,16 +74,26 @@ To run the script with these example files:
    python src/main.py
    ```
 3. When prompted, enter:
-   - For the audio file: `test.mp3`
+   - For the audio file: `test.mp3` or `longer_test.mp3`
    - For the competencies file: `test.txt`
 
 This will process the example audio file using the example competencies and generate a `report.html` file with the results.
 
-You can also view the `test_report.html` file in your web browser to see an example of the formatted output without running the script.
+You can also view the `test_report.html` file in your web browser to see an example of the formatted output without running the script. For a more comprehensive example, check out the report generated from the `longer_test.mp3` file.
+
+## Key Features
+
+1. **ASCII Art Introduction**: The script now displays an ASCII art introduction featuring "TPZ" (Transcribe, Process, Zensify) when launched, providing a visually appealing start to the user experience.
+
+2. **OpenAI Whisper Integration**: The tool uses OpenAI's Whisper model for accurate audio transcription, supporting various audio formats.
+
+3. **OpenRouter Integration**: The script integrates with OpenRouter, allowing access to a wide range of language models for competency extraction and analysis.
+
+4. **Speaker Diarization**: An optional feature that can identify and separate different speakers in the audio, providing more context to the transcription.
+
+5. **HTML Report Generation**: The output is now an HTML file (`report.html`) instead of a text file, providing a more visually appealing and easier-to-read report of the competency insights.
 
 ## Notes and Recommendations
-
-- The output is now an HTML file (`report.html`) instead of a text file. This provides a more visually appealing and easier-to-read report of the competency insights.
 
 - Change the system prompt in main.py to suit different needs.  
 
@@ -102,4 +114,13 @@ OpenRouter provides access to all frontier models, closed and open-source, as we
 
 - This is a clunky prototype from a script kid type. Let's break it, and then make it better!
 
-- Feel free to modify the HTML template in the `create_html_report` function in `main.py` to further customize the report's appearance and structure.
+- Feel free to modify the HTML template in the `extract_competency_insights` function in `main.py` to further customize the report's appearance and structure.
+
+## Future Improvements
+
+- Enhance the diarization feature for better speaker identification in complex audio scenarios.
+- Implement more customizable competency extraction algorithms.
+- Add support for batch processing of multiple audio files.
+- Develop a user-friendly GUI for easier interaction with the tool.
+
+We welcome contributions and suggestions for improving this tool. Please feel free to submit issues or pull requests on our GitHub repository.
