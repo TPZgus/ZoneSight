@@ -81,17 +81,6 @@ This will process the example audio file using the example competencies and gene
 
 You can also view the `test_report.html` file in your web browser to see an example of the formatted output without running the script. For a more comprehensive example, check out the report generated from the `longer_test.mp3` file.
 
-## Key Features
-
-1. **ASCII Art Introduction**: The script now displays an ASCII art introduction featuring "TPZ" (Transcribe, Process, Zensify) when launched, providing a visually appealing start to the user experience.
-
-2. **OpenAI Whisper Integration**: The tool uses OpenAI's Whisper model for accurate audio transcription, supporting various audio formats.
-
-3. **OpenRouter Integration**: The script integrates with OpenRouter, allowing access to a wide range of language models for competency extraction and analysis.
-
-4. **Speaker Diarization**: An optional feature that can identify and separate different speakers in the audio, providing more context to the transcription.
-
-5. **HTML Report Generation**: The output is now an HTML file (`report.html`) instead of a text file, providing a more visually appealing and easier-to-read report of the competency insights.
 
 ## Notes and Recommendations
 
