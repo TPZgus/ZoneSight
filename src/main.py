@@ -6,6 +6,17 @@ import sys
 import argparse
 from config import *
 
+def display_intro():
+    intro = """
+ _______ ____  _____
+|__   __|  _ \|__  /
+   | |  | |_) | / / 
+   | |  |  __/ / /_ 
+   |_|  |_|   /____|
+   
+Text Parsing Zone?    """
+    print(intro)
+
 def transcribe_audio(audio_file):
     try:
         client = OpenAI(api_key=OPENAI_API_KEY)
@@ -138,6 +149,8 @@ def extract_competency_insights(transcript, competency_definitions):
         return None
 
 def main(perform_diarization):
+    display_intro()
+    
     audio_file = input("Enter the name of the audio file: ")
     competency_file = input("Enter the name of the competencies file: ")
 
