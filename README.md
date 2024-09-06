@@ -103,13 +103,11 @@ OpenRouter provides access to all frontier models, closed and open-source, as we
 
 - This is a clunky prototype from a script kid type. Let's break it, and then make it better!
 
-- Feel free to modify the HTML template in the `extract_competency_insights` function in `main.py` to further customize the report's appearance and structure.
 
-## Future Improvements
+## Future Improvements Parking Lot
 
-- Enhance the diarization feature for better speaker identification in complex audio scenarios.
-- Implement more customizable competency extraction algorithms.
+- Fix API integration for diarization of speakers.
 - Add support for batch processing of multiple audio files.
 - Develop a user-friendly GUI for easier interaction with the tool.
 
-We welcome contributions and suggestions for improving this tool. Please feel free to submit issues or pull requests on our GitHub repository.
+Other ideas?
