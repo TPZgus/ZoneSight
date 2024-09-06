@@ -72,7 +72,7 @@ def extract_competency_insights(transcript, competency_definitions):
         }
         
         prompt = f"""
-        Analyze the following transcript and extract insights about student competency development based on the provided competency definitions. Provide an analysis for EACH of the commpetencies in the competency definitions text.  From the transcript, focus on identifying evidence of competency development, areas for improvement, and specific examples from the transcript that demonstrate competency-related behaviors or knowledge.
+        Analyze the following transcript and extract insights about student competency development based on the provided competency definitions. Generate an HTML report that includes an analysis for EACH of the competencies in the competency definitions text. Focus on identifying evidence of competency development, areas for improvement, and specific examples from the transcript that demonstrate competency-related behaviors or knowledge.
 
         Competency Definitions:
         {competency_definitions}
@@ -80,13 +80,42 @@ def extract_competency_insights(transcript, competency_definitions):
         Transcript:
         {transcript}
 
-        Please provide a structured analysis of competency development, including:
-        1. Evidence of competency development for each defined competency
-        2. Areas for improvement or further development
-        3. Specific examples from the transcript that demonstrate competency-related behaviors or knowledge
-        4. Overall assessment of the student's competency development
+        Please provide a structured HTML report of competency development, including:
+        1. A section for the transcript
+        2. A section for competency insights, with subsections for each competency
+        3. Evidence of competency development for each defined competency
+        4. Areas for improvement or further development
+        5. Specific examples from the transcript that demonstrate competency-related behaviors or knowledge
+        6. Overall assessment of the student's competency development
 
-        Present your analysis in a clear, structured format.
+        Use appropriate HTML tags to structure your report. Include inline CSS for basic styling. Ensure the HTML is well-formatted and easy to read. The HTML structure should be as follows:
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Competency Insights Report</title>
+            <style>
+                /* Include your CSS styles here */
+            </style>
+        </head>
+        <body>
+            <h1>Competency Insights Report</h1>
+            
+            <section id="transcript">
+                <h2>Transcript</h2>
+                <!-- Include the transcript here -->
+            </section>
+            
+            <section id="competency-insights">
+                <h2>Competency Insights</h2>
+                <!-- Include competency analysis here -->
+            </section>
+        </body>
+        </html>
+
+        Ensure that your response is a complete, valid HTML document.
         """
         
         data = {
@@ -107,61 +136,6 @@ def extract_competency_insights(transcript, competency_definitions):
     except Exception as e:
         print(f"Error in competency insight extraction: {e}")
         return None
-
-def create_html_report(transcript, competency_insights):
-    html_content = f"""
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Competency Insights Report</title>
-        <style>
-            body {{
-                font-family: Arial, sans-serif;
-                line-height: 1.6;
-                color: #333;
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
-            }}
-            h1, h2 {{
-                color: #2c3e50;
-            }}
-            .section {{
-                margin-bottom: 30px;
-            }}
-            .transcript {{
-                background-color: #f9f9f9;
-                border: 1px solid #ddd;
-                padding: 15px;
-                border-radius: 5px;
-                white-space: pre-wrap;
-                word-wrap: break-word;
-            }}
-            .transcript p {{
-                margin: 0 0 10px 0;
-            }}
-        </style>
-    </head>
-    <body>
-        <h1>Competency Insights Report</h1>
-        
-        <div class="section">
-            <h2>Transcript</h2>
-            <div class="transcript">
-                {transcript.replace('\\n', '<br>')}
-            </div>
-        </div>
-        
-        <div class="section">
-            <h2>Competency Insights</h2>
-            {competency_insights}
-        </div>
-    </body>
-    </html>
-    """
-    return html_content
 
 def main(perform_diarization):
     audio_file = input("Enter the name of the audio file: ")
@@ -185,13 +159,11 @@ def main(perform_diarization):
     if competency_definitions is None:
         return
 
-    print("Extracting competency insights from transcript...")
-    competency_insights = extract_competency_insights(transcript, competency_definitions)
-    if competency_insights is None:
+    print("Extracting competency insights and generating HTML report...")
+    html_report = extract_competency_insights(transcript, competency_definitions)
+    if html_report is None:
         return
 
-    html_report = create_html_report(transcript, competency_insights)
-    
     print("\nWriting output to report.html...")
     try:
         with open('report.html', 'w', encoding='utf-8') as report_file:
