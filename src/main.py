@@ -136,6 +136,11 @@ def create_html_report(transcript, competency_insights):
                 border: 1px solid #ddd;
                 padding: 15px;
                 border-radius: 5px;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }}
+            .transcript p {{
+                margin: 0 0 10px 0;
             }}
         </style>
     </head>
@@ -145,7 +150,7 @@ def create_html_report(transcript, competency_insights):
         <div class="section">
             <h2>Transcript</h2>
             <div class="transcript">
-                <pre>{transcript}</pre>
+                {transcript.replace('\\n', '<br>')}
             </div>
         </div>
         
