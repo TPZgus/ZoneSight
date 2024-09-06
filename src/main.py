@@ -108,6 +108,56 @@ def extract_competency_insights(transcript, competency_definitions):
         print(f"Error in competency insight extraction: {e}")
         return None
 
+def create_html_report(transcript, competency_insights):
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Competency Insights Report</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }}
+            h1, h2 {{
+                color: #2c3e50;
+            }}
+            .section {{
+                margin-bottom: 30px;
+            }}
+            .transcript {{
+                background-color: #f9f9f9;
+                border: 1px solid #ddd;
+                padding: 15px;
+                border-radius: 5px;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Competency Insights Report</h1>
+        
+        <div class="section">
+            <h2>Transcript</h2>
+            <div class="transcript">
+                <pre>{transcript}</pre>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Competency Insights</h2>
+            {competency_insights}
+        </div>
+    </body>
+    </html>
+    """
+    return html_content
+
 def main(perform_diarization):
     audio_file = input("Enter the name of the audio file: ")
     competency_file = input("Enter the name of the competencies file: ")
@@ -135,15 +185,15 @@ def main(perform_diarization):
     if competency_insights is None:
         return
 
-    output = f"Transcript:\n\n{transcript}\n\nCompetency Insights:\n\n{competency_insights}"
+    html_report = create_html_report(transcript, competency_insights)
     
-    print("\nWriting output to report.txt...")
+    print("\nWriting output to report.html...")
     try:
-        with open('report.txt', 'w') as report_file:
-            report_file.write(output)
-        print("Report successfully written to report.txt")
+        with open('report.html', 'w', encoding='utf-8') as report_file:
+            report_file.write(html_report)
+        print("Report successfully written to report.html")
     except Exception as e:
-        print(f"Error writing to report.txt: {e}")
+        print(f"Error writing to report.html: {e}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process audio file for transcription, optional diarization, and competency insight extraction.")

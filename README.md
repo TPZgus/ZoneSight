@@ -50,9 +50,11 @@ This is a prototype tool for extracting student competency insights from audio r
      python src/main.py --diarize
      ```
 
-3. When prompted, enter the names of your audio file and competencies file (you can start w the example files, see [Example Files] below).
+3. When prompted, enter the names of your audio file and competencies file (you can start with the example files, see [Example Files] below).
 
-4. The script will process the audio and generate a `report.txt` file with the transcript and competency insights.
+4. The script will process the audio and generate a `report.html` file with the transcript and competency insights.
+
+5. Open the `report.html` file in a web browser to view the formatted report.
 
 ## Example Files
 
@@ -60,6 +62,7 @@ This repository includes example files for testing:
 
 - `test.mp3`: A short sample audio file of a student reflecting on their experience in general.
 - `test.txt`: A sample competencies file
+- `test_report.html`: An example of the HTML report generated from the test audio file
 
 To run the script with these example files:
 
@@ -72,15 +75,19 @@ To run the script with these example files:
    - For the audio file: `test.mp3`
    - For the competencies file: `test.txt`
 
-This will process the example audio file using the example competencies and generate a `report.txt` file with the results.
+This will process the example audio file using the example competencies and generate a `report.html` file with the results.
+
+You can also view the `test_report.html` file in your web browser to see an example of the formatted output without running the script.
 
 ## Notes and Recommendations
 
+- The output is now an HTML file (`report.html`) instead of a text file. This provides a more visually appealing and easier-to-read report of the competency insights.
+
 - Change the system prompt in main.py to suit different needs.  
 
-- Try different ways of querying the competencies text file re: the transcript.
+- Try different ways of querying the competencies text file with respect to the transcript.
 
-- You can change LLMs by editing config.py.  As of 08/2024, Claude 3.5 Sonnet is recommended:
+- You can change LLMs by editing config.py. As of 08/2024, Claude 3.5 Sonnet is recommended:
 
   ```
   anthropic/claude-3.5-sonnet
@@ -91,8 +98,8 @@ This will process the example audio file using the example competencies and gene
   cohere/command-r-plus-08-2024
   ```
 
-
 OpenRouter provides access to all frontier models, closed and open-source, as well as smaller more specialized models.
 
+- This is a clunky prototype from a script kid type. Let's break it, and then make it better!
 
-- This is a clunky prototype from a script kid type.  Let's break it, and then make it better!
+- Feel free to modify the HTML template in the `create_html_report` function in `main.py` to further customize the report's appearance and structure.
