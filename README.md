@@ -116,7 +116,7 @@ This longer test output demonstrates the tool's capability to provide nuanced an
 
 OpenRouter provides access to all frontier models, closed and open-source, as well as smaller more specialized models.
 
-- This is a clunky prototype from a script kid type. Let's break it, and then make it better!
+Let's break it, and then make it better!
 
 ## Future Improvements Parking Lot
 
