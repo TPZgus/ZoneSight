@@ -4,6 +4,8 @@ import requests
 import os
 import sys
 import argparse
+import subprocess
+from pydub import AudioSegment
 from config import *
 
 def display_intro():
@@ -16,6 +18,38 @@ def display_intro():
    
 Text Parsing Zone?    """
     print(intro)
+
+def convert_to_wav(input_file):
+    if input_file.lower().endswith('.wav'):
+        return input_file
+    
+    output_file = os.path.splitext(input_file)[0] + '.wav'
+    try:
+        subprocess.run(['ffmpeg', '-i', input_file, output_file], check=True)
+        print(f"Converted {input_file} to {output_file}")
+        return output_file
+    except subprocess.CalledProcessError as e:
+        print(f"Error converting file to WAV: {e}")
+        return None
+
+def split_audio(file_path, max_size_mb=24):
+    audio = AudioSegment.from_wav(file_path)
+    max_size_bytes = max_size_mb * 1024 * 1024
+    duration_ms = len(audio)
+    chunk_duration_ms = int((max_size_bytes / len(audio.raw_data)) * duration_ms)
+    
+    chunks = []
+    for i, chunk_start in enumerate(range(0, duration_ms, chunk_duration_ms)):
+        chunk_end = min(chunk_start + chunk_duration_ms, duration_ms)
+        chunk = audio[chunk_start:chunk_end]
+        chunk_file = f"{os.path.splitext(file_path)[0]}_chunk_{i}.wav"
+        chunk.export(chunk_file, format="wav")
+        chunks.append(chunk_file)
+        
+        # Debug logging
+        print(f"Chunk {i}: Start={chunk_start}ms, End={chunk_end}ms, Duration={chunk_end-chunk_start}ms, Size={os.path.getsize(chunk_file)} bytes")
+    
+    return chunks
 
 def transcribe_audio(audio_file):
     try:
@@ -52,12 +86,20 @@ def load_diarization_pipeline():
 
 def transcribe_and_diarize(audio_file, perform_diarization=False):
     try:
-        transcription = transcribe_audio(audio_file)
-        if transcription is None:
-            return None
+        chunks = split_audio(audio_file)
+        transcriptions = []
+        
+        for chunk in chunks:
+            print(f"Transcribing chunk: {chunk}")
+            transcription = transcribe_audio(chunk)
+            if transcription is None:
+                return None
+            transcriptions.append(transcription)
+        
+        full_transcription = " ".join(transcriptions)
 
         if not perform_diarization:
-            return transcription
+            return full_transcription
 
         diarization_pipeline = load_diarization_pipeline()
 
@@ -69,7 +111,7 @@ def transcribe_and_diarize(audio_file, perform_diarization=False):
         for turn, _, speaker in diarization.itertracks(yield_label=True):
             segment_start = turn.start
             segment_end = turn.end
-            segment_text = transcription[segment_start:segment_end]
+            segment_text = full_transcription[segment_start:segment_end]
             diarized_transcript.append(f"Speaker {speaker}: {segment_text}")
 
         return "\n".join(diarized_transcript)
@@ -124,7 +166,7 @@ def extract_competency_insights(transcript, competency_definitions):
             </style>
         </head>
         <body>
-            <h1>Competency Insights Report</h1>
+            <h1>TPZ Competency Insights Report</h1>
             
             <section id="overview">
                 <h2>Overview</h2>
@@ -174,8 +216,12 @@ def main(perform_diarization):
         print(f"Error: The competency definition file {competency_file} does not exist.")
         return
 
+    wav_file = convert_to_wav(audio_file)
+    if wav_file is None:
+        return
+
     print("Transcribing audio..." + (" and performing diarization" if perform_diarization else ""))
-    transcript = transcribe_and_diarize(audio_file, perform_diarization)
+    transcript = transcribe_and_diarize(wav_file, perform_diarization)
     if transcript is None:
         return
 

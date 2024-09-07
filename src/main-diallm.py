@@ -104,7 +104,7 @@ def extract_competency_insights(transcript, competency_definitions):
         {transcript}
 
         Please provide a structured HTML report of competency development, including:
-        1. A section for the transcript
+        1. An Overview section listing ALL of the competencies and describing the report briefly.
         2. A section for competency insights, with subsections for each competency
         3. Evidence of competency development for each defined competency
         4. Areas for improvement or further development
@@ -124,11 +124,11 @@ def extract_competency_insights(transcript, competency_definitions):
             </style>
         </head>
         <body>
-            <h1>Competency Insights Report</h1>
+            <h1>TPZ Competency Insights Report</h1>
             
-            <section id="transcript">
-                <h2>Transcript</h2>
-                <!-- Include the transcript here -->
+            <section id="overview">
+                <h2>Overview</h2>
+                <!-- Include the Overview section here -->
             </section>
             
             <section id="competency-insights">
