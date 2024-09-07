@@ -33,9 +33,21 @@ def transcribe_audio(audio_file):
 
 def load_diarization_pipeline():
     try:
-        return Pipeline.from_pretrained(DIARIZATION_MODEL)
+        print("Attempting to load the diarization pipeline...")
+        pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1",
+                                            use_auth_token=HUGGING_FACE_TOKEN)
+        print("Diarization pipeline loaded successfully.")
+        return pipeline
     except Exception as e:
         print(f"Error loading diarization pipeline: {e}")
+        print("\nTroubleshooting steps:")
+        print("1. Ensure you have an active internet connection.")
+        print("2. Verify that you've accepted the user conditions at https://hf.co/pyannote/speaker-diarization")
+        print("3. Check that your Hugging Face token is correct in the .env file.")
+        print("4. Try running 'huggingface-cli login' in your terminal and enter your token when prompted.")
+        print("5. If the issue persists, try clearing your Hugging Face cache:")
+        print("   - On macOS/Linux: rm -rf ~/.cache/huggingface")
+        print("   - On Windows: rmdir /s /q %USERPROFILE%\\.cache\\huggingface")
         sys.exit(1)
 
 def transcribe_and_diarize(audio_file, perform_diarization=False):
@@ -49,10 +61,10 @@ def transcribe_and_diarize(audio_file, perform_diarization=False):
 
         diarization_pipeline = load_diarization_pipeline()
 
-        # Perform speaker diarization
+        print("Performing speaker diarization...")
         diarization = diarization_pipeline(audio_file)
 
-        # Combine transcription with speaker labels
+        print("Combining transcription with speaker labels...")
         diarized_transcript = []
         for turn, _, speaker in diarization.itertracks(yield_label=True):
             segment_start = turn.start
@@ -92,7 +104,7 @@ def extract_competency_insights(transcript, competency_definitions):
         {transcript}
 
         Please provide a structured HTML report of competency development, including:
-        1. A section for the transcript
+        1. An Overview section listing ALL of the competencies and describing the report briefly.
         2. A section for competency insights, with subsections for each competency
         3. Evidence of competency development for each defined competency
         4. Areas for improvement or further development
@@ -114,9 +126,9 @@ def extract_competency_insights(transcript, competency_definitions):
         <body>
             <h1>Competency Insights Report</h1>
             
-            <section id="transcript">
-                <h2>Transcript</h2>
-                <!-- Include the transcript here -->
+            <section id="overview">
+                <h2>Overview</h2>
+                <!-- Include the Overview section here -->
             </section>
             
             <section id="competency-insights">
