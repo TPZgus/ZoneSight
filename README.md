@@ -66,7 +66,7 @@ This repository includes example files for testing:
 - `test.txt`: A sample competencies file
 - `test_report.html`: An example of the HTML report generated from the test audio file
 - `longer_test.mp3`: A longer sample audio file for more comprehensive testing.
-- `test_report.html`: An example of a longer HTML report generated from the longer test audio file.
+- `longer_test_report.html`: An example of a longer HTML report generated from the longer test audio file.
 
 To run the script with these example files:
 
@@ -81,8 +81,21 @@ To run the script with these example files:
 
 This will process the example audio file using the example competencies and generate a `report.html` file with the results.
 
-You can also view the `test_report.html` file in your web browser to see an example of the formatted output without running the script. For a more comprehensive example, check out the report generated from the `longer_test.mp3` file.
+You can also view the `test_report.html` file in your web browser to see an example of the formatted output without running the script. For a more comprehensive example, check out the `longer_test_report.html` file.
 
+## Longer Test Output
+
+We've included a more comprehensive example output in the `longer_test_report.html` file. This report showcases a more detailed analysis of student competencies based on a longer audio sample. To view this report:
+
+1. Open the `longer_test_report.html` file in your web browser.
+2. You'll see a detailed transcript of the student's response, followed by in-depth insights into various competencies such as Growth Mindset, STEAM Interest, Creativity, Adaptability, Problem Solving, and more.
+3. Each competency section includes:
+   - Evidence of competency development
+   - Areas for improvement
+   - Specific examples from the transcript
+4. The report concludes with an overall assessment of the student's competency development.
+
+This longer test output demonstrates the tool's capability to provide nuanced and comprehensive insights into student competencies based on more extensive input.
 
 ## Notes and Recommendations
 
@@ -104,7 +117,6 @@ You can also view the `test_report.html` file in your web browser to see an exam
 OpenRouter provides access to all frontier models, closed and open-source, as well as smaller more specialized models.
 
 - This is a clunky prototype from a script kid type. Let's break it, and then make it better!
-
 
 ## Future Improvements Parking Lot
 
