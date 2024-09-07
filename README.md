@@ -43,11 +43,11 @@ This is a prototype tool for extracting student competency insights from audio r
 1. Prepare your audio file (supported formats include MP3, MP4, WAV) and competencies file (a text file with competency definitions).
 
 2. Run the script:
-   - Without diarization (default):
+   - Without diarization (default for now, diarization doesn't work YET... coming soon):
      ```bash
      python src/main.py
      ```
-   - With diarization:
+   - With diarization (again, this DOES NOT work... YET):
      ```bash
      python src/main.py --diarize
      ```
