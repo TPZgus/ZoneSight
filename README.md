@@ -1,4 +1,4 @@
-![Competency Extractor](img.webp)
+![Competency Extractor](banner.jpg)
 
 # Competency Extractor
 
