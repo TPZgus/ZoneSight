@@ -97,6 +97,9 @@ We've included a more comprehensive example output in the `longer_test_report.ht
 
 This longer test output demonstrates the tool's capability to provide nuanced and comprehensive insights into student competencies based on more extensive input.
 
+## Diarization and 'multi-speaker-discussion.mp3'
+WIP. Stay tuned.
+
 ## Notes and Recommendations
 
 - Change the system prompt in main.py to suit different needs.  
