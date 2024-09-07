@@ -146,12 +146,12 @@ def extract_competency_insights(transcript, competency_definitions):
         {transcript}
 
         Please provide a structured HTML report of competency development, including:
-        1. An Overview section listing ALL of the competencies and describing the report briefly.
-        2. A section for competency insights, with subsections for each competency
+        1. An Overview section announcing the purpose of this report and the insights it tries to provide, THEN, listing ALL of the 14 competencies in two columns, with 7 rows per column, and describing the report briefly.
+        2. A section for competency insights, with subsections for each competency arranged in two columns with 7 rows per column
         3. Evidence of competency development for each defined competency
         4. Areas for improvement or further development
         5. Specific examples from the transcript that demonstrate competency-related behaviors or knowledge
-        6. Overall assessment of the student's competency development
+        6. OVERALL ASSESSMENT of the student's competency development in a final section in green pastel calm backdrop.
 
         Use appropriate HTML tags to structure your report. Include inline CSS for basic styling. Ensure the HTML is well-formatted and easy to read. The HTML structure should be as follows:
 
@@ -162,7 +162,35 @@ def extract_competency_insights(transcript, competency_definitions):
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Competency Insights Report</title>
             <style>
-                /* Include your CSS styles here */
+                body {{
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }}
+                h1, h2 {{
+                    color: #2c3e50;
+                }}
+                .competency-grid, .overview-grid {{
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 20px;
+                }}
+                .competency-item {{
+                    border: 1px solid #ddd;
+                    padding: 15px;
+                    border-radius: 5px;
+                }}
+                .overview-grid ul {{
+                    list-style-type: none;
+                    padding: 0;
+                    margin: 0;
+                }}
+                .overview-grid li {{
+                    margin-bottom: 10px;
+                }}
             </style>
         </head>
         <body>
@@ -170,17 +198,29 @@ def extract_competency_insights(transcript, competency_definitions):
             
             <section id="overview">
                 <h2>Overview</h2>
-                <!-- Include the Overview section here -->
+                <div class="overview-grid">
+                    <!-- Include the list of competencies here in two columns -->
+                </div>
+                <!-- Include the brief description of the report here -->
             </section>
             
             <section id="competency-insights">
                 <h2>Competency Insights</h2>
-                <!-- Include competency analysis here -->
+                <div class="competency-grid">
+                    <!-- Include competency analysis here, with each competency in a div with class "competency-item" -->
+                </div>
+            </section>
+            
+             <section id="Overall Assessment">
+                <h2>Overview</h2>
+                <div class="overall-grid">
+                    <!-- include the overall assessment here -->
+                </div>
             </section>
         </body>
         </html>
 
-        Ensure that your response is a complete, valid HTML document.
+        Ensure that your response is a complete, valid HTML document with the competencies listed in the overview section arranged in two columns, 6 rows per column, and the competency insights section also arranged in two columns, 6 rows per column.
         """
         
         data = {
