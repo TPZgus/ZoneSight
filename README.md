@@ -1,3 +1,5 @@
+![Competency Extractor](img.webp)
+
 # Competency Extractor
 
 This is a prototype tool for extracting student competency insights from audio recordings of student presentations or discussions.
