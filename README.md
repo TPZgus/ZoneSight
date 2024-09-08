@@ -2,7 +2,7 @@
 
 # Competency Extractor
 
-This is a prototype tool for extracting student competency insights from audio recordings of student presentations or discussions.
+This is a prototype tool for extracting student competency insights from audio recordings of student presentations or discussions. It now supports multi-speaker analysis through diarization.
 
 ## Prerequisites
 
@@ -61,6 +61,10 @@ This is a prototype tool for extracting student competency insights from audio r
    - Visit https://huggingface.co/pyannote/speaker-diarization
    - Click on "Access repository" and accept the terms.
 
+9. Set up pyannote:
+   - After accepting the use policies on Hugging Face, run the `copy_model_files.py` script in the project directory. This script will copy the necessary files to the correct folders.
+   - Ensure you're logged in with the same Hugging Face token that's in your `.env` file.
+
 ## Usage
 
 1. Prepare your audio file (supported formats include MP3, MP4, WAV) and competencies file (a text file with competency definitions).
@@ -70,7 +74,7 @@ This is a prototype tool for extracting student competency insights from audio r
      ```bash
      python src/main.py
      ```
-   - With diarization:
+   - With diarization (for multi-speaker analysis):
      ```bash
      python src/main.py --diarize
      ```
@@ -81,9 +85,11 @@ This is a prototype tool for extracting student competency insights from audio r
 
 5. For large audio files, the script will automatically split them into smaller chunks to avoid API limitations.
 
-6. The script will process the audio and generate a `report.html` file with the transcript and competency insights.
+6. If diarization is enabled, the script will identify different speakers in the audio.
 
-7. Open the `report.html` file in a web browser to view the formatted report.
+7. The script will process the audio and generate a `report.html` file with the transcript and competency insights. For multi-speaker recordings, the report will include speaker-specific analysis.
+
+8. Open the `report.html` file in a web browser to view the formatted report.
 
 ## Example Files
 
@@ -119,19 +125,29 @@ You can also view the `test_report.html` or `longer_test_report.html` file in yo
 
 The script now automatically handles large audio files by splitting them into smaller chunks before processing. This allows for processing of files that would otherwise exceed the API's content size limit. The process is transparent to the user and doesn't require any additional steps.
 
-## Longer Test Output
+## Multi-Speaker Support and Diarization
 
-We've included a more comprehensive example output in the `longer_test_report.html` file. This report showcases a more detailed analysis of student competencies based on a longer audio sample. To view this report:
+The Competency Extractor now supports multi-speaker analysis through diarization. When you run the script with the `--diarize` flag, it will:
 
-1. Open the `longer_test_report.html` file in your web browser.
-2. You'll see a detailed transcript of the student's response, followed by in-depth insights into various competencies such as Growth Mindset, STEAM Interest, Creativity, Adaptability, Problem Solving, and more.
+1. Identify different speakers in the audio recording.
+2. Transcribe the audio with speaker labels.
+3. Analyze competencies for each identified speaker separately.
+4. Generate a report that includes speaker-specific insights and an overall analysis.
+
+It will be interesting to experiment with different formats of output for multi-speaker analyses.
+
+## Longer Test Output and Multi-Speaker Discussion Example
+
+We've included a more comprehensive example output in the `longer_test_report.html` file. This report showcases a more detailed analysis of student competencies based on a longer audio sample. Same for a report generated from a 7-min multi-speaker recording (included in the repo).  To view these reports:
+
+1. Open the `longer_test_report.html` or the 'multi_speaker_test_report.hmml' file in your web browser.
+2. You'll see a detailed report of each type, depending on the input audio.
 3. Each competency section includes:
    - Evidence of competency development
    - Areas for improvement
    - Specific examples from the transcript
-4. The report concludes with an overall assessment of the student's competency development.
+4. The report concludes with an overall assessment of the student(s) competency development.  If it's a multi-speaker deal, it will label the speakers in the report.
 
-This longer test output demonstrates the tool's capability to provide nuanced and comprehensive insights into student competencies based on more extensive input.
 
 ## Notes and Recommendations
 
@@ -154,21 +170,6 @@ OpenRouter provides access to all frontier models, closed and open-source, as we
 
 Let's break it, and then make it better!
 
-## Troubleshooting
-
-If you encounter issues with the diarization pipeline, try the following steps:
-
-1. Ensure you have an active internet connection.
-2. Verify that you've accepted the user conditions at https://hf.co/pyannote/speaker-diarization
-3. Check that your Hugging Face token is correct in the .env file.
-4. Try running 'huggingface-cli login' in your terminal and enter your token when prompted.
-5. If the issue persists, try clearing your Hugging Face cache:
-   - On macOS/Linux: `rm -rf ~/.cache/huggingface`
-   - On Windows: `rmdir /s /q %USERPROFILE%\.cache\huggingface`
-
-If you're having trouble with large audio files:
-1. The script now automatically handles large files by splitting them into smaller chunks.
-2. If you still encounter issues, try manually splitting your audio file into smaller segments using audio editing software before processing.
 
 ## Future Improvements Parking Lot
 
