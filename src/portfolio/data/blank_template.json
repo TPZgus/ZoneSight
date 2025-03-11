@@ -1,0 +1,74 @@
+{
+  "/": {
+    "type": "text",
+    "text": "This is the blank template for the home page."
+  },
+  "/my-toolkit/sewing/beginner-sewing": {
+    "type": "text",
+    "text": "This is the blank template for beginner sewing."
+  },
+  "/my-toolkit/sewing/intermediate-sewing": {
+    "type": "text",
+    "text": "This is the blank template for intermediate sewing."
+  },
+  "/my-toolkit/sewing/advanced-sewing": {
+    "type": "text",
+    "text": "This is the blank template for advanced sewing."
+  },
+  "/my-toolkit/3d-printing/beginner-3d-printing": {
+    "type": "text",
+    "text": "This is the blank template for beginner 3D printing."
+  },
+  "/my-toolkit/3d-printing/intermediate-3d-printing": {
+    "type": "text",
+    "text": "This is the blank template for intermediate 3D printing."
+  },
+  "/my-toolkit/3d-printing/advanced-3d-printing": {
+    "type": "text",
+    "text": "This is the blank template for advanced 3D printing."
+  },
+  "/my-toolkit/2d-design/beginner-2d-design": {
+    "type": "text",
+    "text": "This is the blank template for beginner 2D design."
+  },
+  "/my-toolkit/2d-design/intermediate-2d-design": {
+    "type": "text",
+    "text": "This is the blank template for intermediate 2D design."
+  },
+  "/my-toolkit/2d-design/advanced-2d-design": {
+    "type": "text",
+    "text": "This is the blank template for advanced 2D design."
+  },
+  "/my-toolkit/coding/beginner-coding": {
+    "type": "text",
+    "text": "This is the blank template for beginner coding."
+  },
+  "/my-toolkit/coding/intermediate-coding": {
+    "type": "text",
+    "text": "This is the blank template for intermediate coding."
+  },
+  "/my-toolkit/coding/advanced-coding": {
+    "type": "text",
+    "text": "This is the blank template for advanced coding."
+  },
+  "/my-business": {
+    "type": "text",
+    "text": "This is the blank template for the business page."
+  },
+  "/my-business/business-plan": {
+    "type": "text",
+    "text": "This is the blank template for the business plan."
+  },
+  "/my-business/brand-identity": {
+    "type": "text",
+    "text": "This is the blank template for brand identity."
+  },
+  "/my-business/product-development": {
+    "type": "text",
+    "text": "This is the blank template for product development."
+  },
+  "/resume-work-experience": {
+    "type": "text",
+    "text": "This is the blank template for resume and work experience."
+  }
+}
