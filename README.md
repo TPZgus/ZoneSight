@@ -1,3 +1,5 @@
+![CompExtractor Banner](banner.jpeg)
+
 # CompExtractor - Competency Analysis Tool
 
 A powerful tool that combines audio analysis and portfolio assessment to extract competency insights across multiple dimensions, combining local processing with cloud services.
