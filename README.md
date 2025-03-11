@@ -1,203 +1,207 @@
-![ZoneSight](banner.png)
+# CompExtractor - Competency Analysis Tool
 
-# ZoneSight (Early Prototype)
+A powerful tool that combines audio analysis and portfolio assessment to extract competency insights across multiple dimensions, combining local processing with cloud services.
 
-This early prototype tool extracts student competency insights from audio recordings of presentations, reflections, discussions, meetings, or ANY informal organic conversation. The audio is transcribed, multiple speakers labeled, analyzed for competencies (using deep contextual analysis to pick up nuanced reflection on competencies, NOT key-word based).  Then, a formatted report is generated and saved to the working directory.
+## Table of Contents
+- [Overview](#overview)
+- [Components](#components)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [GUI Version](#gui-version)
+    - [Audio Reflection Interface](#audio-reflection-interface)
+    - [Portfolio Interface](#portfolio-interface)
+  - [Command Line Version](#command-line-version)
+- [Output](#output)
+  - [Audio Analysis Output](#audio-analysis-output)
+  - [Portfolio Analysis Output](#portfolio-analysis-output)
+  - [Directory Structure](#directory-structure)
+- [LLM Provider](#llm-provider)
+- [System Requirements](#system-requirements)
+- [Troubleshooting](#troubleshooting)
 
-## Prerequisites
+## Overview
 
-- Python 3.11.x (tested 3.11.7 on PC and 3.11.10 on Mac, seems fine)
-- ffmpeg (for audio file conversion)
+CompExtractor analyzes both audio recordings and portfolios to extract competency insights, providing detailed reports on key competency dimensions. The tool combines local processing with cloud services:
+
+- For audio analysis: Local transcription with cloud-based speaker diarization and competency analysis
+- For portfolio analysis: Web page conversion to PDF and cloud-based competency analysis
+
+## Components
+
+### Local Processing
+- **Transcription**: Uses OpenAI's Whisper locally (no API key needed)
+  - Runs completely offline
+  - Uses local GPU/CPU for processing
+  - Supports multiple languages
+  - Downloads model files on first use (~1.5GB for medium model)
+
+### Cloud Services Required
+1. **Speaker Diarization**: Uses pyannote.audio (requires Hugging Face token)
+   - Requires accepting model terms of use at huggingface.co
+   - Needs HUGGING_FACE_TOKEN in .env
+
+2. **HTML-to-PDF Conversion**: Uses an external service for portfolio analysis
+   - Converts Google Sites pages to PDF for analysis
+   - Needs PDF_HOST in .env (defaults to https://html2pdf-u707.onrender.com)
+
+3. **Competency Analysis**: Uses OpenRouter API (requires API key)
+   - Analyzes transcripts and portfolio content against competency framework
+   - Generates ratings and insights
+   - Needs OPENROUTER_API_KEY and related settings in .env
+
+## Features
+
+Analyzes key competencies across three levels:
+- Emerging (1-3)
+- Developing (4-7)
+- Proficient (8-10)
+
+The competency framework is customizable through RTF files, allowing you to define your own competency dimensions and criteria.
 
 ## Installation
 
-1. Install ffmpeg:
-   - Windows: Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add to system PATH.
-   - macOS: Use Homebrew: `brew install ffmpeg`
-   - Linux: Use your package manager, e.g., `sudo apt-get install ffmpeg`
-
-2. Clone the repository:
-   ```bash
-   git clone https://github.com/fizt656/compextractor.git
-   cd compextractor
-   ```
-
-3. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
-
-4. Install required packages:
+1. Clone the repository
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-5. Set up API keys:
-   ```bash
-   cp .env.example .env
+3. Required environment variables (.env):
    ```
-   Edit `.env` with your API keys.
+   # For Competency Analysis (OpenRouter)
+   OPENROUTER_API_KEY=your_key_here
+   OPENROUTER_URL=https://openrouter.ai/api/v1/chat/completions
+   OPENROUTER_MODEL=anthropic/claude-3.7-sonnet
 
-6. Set up Hugging Face:
-   - Create an account at [Hugging Face](https://huggingface.co/)
-   - Generate an access token in account settings
-   - Add to `.env`: `HUGGING_FACE_TOKEN=your_token_here`
-   - Run `huggingface-cli login`
-   - Accept terms at https://huggingface.co/pyannote/speaker-diarization
-   - Run `copy_model_files.py` in the project directory
+   # For Speaker Diarization (Hugging Face)
+   HUGGING_FACE_TOKEN=your_token_here
+   
+   # For Portfolio Analysis (HTML-to-PDF)
+   PDF_HOST=https://html2pdf-u707.onrender.com
+   ```
+
+4. Required sound files (in root directory):
+   - sound.mp3 (completion sound)
+   - coin.mp3 (progress indicator)
 
 ## Usage
 
-As ZoneSight is an early prototype, please be aware that the user experience and output may vary. We appreciate your patience and feedback as we continue to improve the tool.
+### GUI Version
+```bash
+python src/compextractor_gui.py
+```
 
-1. Prepare your audio file (MP3, MP4, WAV) and competencies file (text file with definitions).
+The GUI provides a landing page with three options:
+- **Audio Reflection** - For analyzing audio recordings
+- **Portfolio** - For analyzing portfolios
+- **Video Performance of Learning** - Placeholder for future implementation
 
-2. **Important**: Before running the script, make sure to customize the competency file and update the system prompt in `src/main_combined.py` to match your specific needs. See the [Customization](#customization) section for more details.
+#### Audio Reflection Interface
+- Simplified audio file selection showing file count and names
+- Competency file selection (RTF/TXT)
+- Optional speaker diarization
+- Output format selection:
+  - Full Report (HTML with narrative and ratings)
+  - Structured JSON (machine-readable format)
+  - Both (generates both formats)
+- Progress tracking
+- Automatic report generation for each audio file
 
-3. Run the combined script:
-   ```bash
-   python src/main_combined.py
-   ```
+#### Portfolio Interface
+- Direct portfolio URL input for single portfolio analysis
+- CSV file upload option for batch processing multiple portfolios
+- Portfolio section selection:
+  - Beginner, Intermediate, Advanced skill levels
+  - Business and Resume sections
+- Output format selection (same options as Audio Reflection)
+- Progress tracking
+- Automatic report generation for each portfolio
 
-4. Enter file names when prompted (audio, competencies, completion sound).
+### Command Line Version
+```bash
+python src/main.py
+```
 
-5. Choose the extraction mode (insights, data, or both) when prompted.
+## Output
 
-6. The script will process the audio and generate a `combined_report.html` file.
+The tool generates different outputs depending on the analysis type:
 
-7. The report will automatically open in your default web browser.
+### Audio Analysis Output
+1. Transcription files (before and after diarization)
+2. HTML report with:
+   - Competency ratings (1-10 scale)
+   - Evidence for each rating
+   - Interactive radar charts for competency visualization
+   - Separate sections for each speaker (if diarization enabled)
+3. Optional structured JSON output
 
-## Extraction Modes
-
-ZoneSight now offers three extraction modes to cater to different analysis needs:
-
-1. **Insights Mode**: This mode focuses on providing narrative insights about the competencies demonstrated in the audio. It generates a detailed HTML report with qualitative analysis of each competency, including evidence of competency development, areas for improvement, and specific examples from the transcript.
-
-2. **Data Mode**: This mode extracts quantitative data about the competencies. It produces a report with numerical ratings for each competency (on a scale of 0-10), along with specific observations and areas for improvement. The data is presented in both tabular form and as a radar chart for easy visualization.
-
-3. **Both Mode**: This comprehensive mode combines both insights and data, providing a full picture of the competency analysis. The report includes narrative insights, quantitative data, and visualizations, offering a holistic view of the competencies demonstrated in the audio.
-
-When running the script, you'll be prompted to choose one of these modes. The output report will be tailored to the selected mode, ensuring you get the most relevant information for your needs.
-
-## Customization
-
-To adapt ZoneSight to your specific needs:
-
-1. **Competency Definitions**: Create a custom competency file (e.g., `custom_competencies.txt`) with your own competency definitions. Each competency should be on a new line, with its name followed by a colon and a brief description.
-
-2. **Main Script**: Create a custom version of `main_combined.py` (e.g., `custom_main_combined.py`) in the `src` directory. Modify the `extract_competency_insights` function by updating the `prompt` variable to reflect your specific requirements for competency analysis.
-
-3. **System Prompt**: In your custom `main_combined.py`, locate the `extract_competency_insights` function. Modify the `prompt` variable to reflect your specific requirements for competency analysis.
-
-4. **Output Customization**: If needed, you can modify the `generate_combined_report` function in your custom `main_combined.py` to adjust the HTML structure and styling of the output report.
-
-Remember to test your changes thoroughly to ensure they work as expected with your specific use case.
-
-## Combined Narrative and Data Output
-
-The combined output mode, a key feature of this prototype, provides both narrative insights and data visualizations in a single report:
-
-1. **Integrated Analysis**: Generates `combined_report.html` containing:
-   - Narrative competency insights for each speaker
-   - Radar chart visualizations of competency ratings
-   - Overall assessment of competencies
-
-   Here are examples of the output you can expect:
-
-   ![Competency Analysis](competency_analysis.png)
-   *Figure 2: Detailed competency analysis for a specific skill area*
-
-   ![Overall Assessment](overall_assessment.png)
-   *Figure 3: Overall assessment of competencies across multiple areas*
-
-   ![Radar Chart](radar_chart.png)
-   *Figure 4: Radar chart visualization of competency ratings*
-
-2. **Multi-Speaker Support**: 
-   - Automatically performs diarization to identify different speakers
-   - Generates separate insights and charts for each speaker
-   - Allows easy comparison across speakers
-
-3. **Consistent Speaker Labeling**: Ensures consistency between narrative and visual parts
-
-4. **Structured Data**: Also generates `competency_data.json` with detailed assessments:
-   - Competency ratings (0-10 scale)
-   - Specific observations from the transcript
+### Portfolio Analysis Output
+1. HTML report with:
+   - Competency ratings (1-10 scale)
+   - Evidence for each rating
    - Areas for improvement
-   - Overall assessment
+   - Interactive radar charts for competency visualization
+   - Examples from the portfolio
+2. Optional structured JSON output
 
-5. **Interactive Visualizations**: Radar charts for each speaker:
-   - Display ratings across all competency dimensions
-   - Labeled with speaker tags (e.g., SPEAKER_00, SPEAKER_01)
-   - Provide intuitive visual representation of strengths and areas for development
+### Directory Structure
+- `results/` - Contains all output files
+  - `transcript_*_before_diarization_*.txt` - Raw transcripts
+  - `transcript_*_after_diarization_*.txt` - Speaker-labeled transcripts
+  - `combined_report_*.html` - Audio analysis reports
+  - `portfolio_report_*.html` - Portfolio analysis reports
+  - `structured_data_*.json` - Audio analysis JSON data
+  - `portfolio_data_*.json` - Portfolio analysis JSON data
+- `temp/` - Temporary audio chunks (auto-cleaned after processing)
 
-## Example Files and Testing
+## LLM Provider
 
-To help you explore this early prototype, we've included some example files for testing:
-- `test.wav`: Short sample audio (individual student)
-- `test.txt`: Sample competencies file
-- `longer_test.wav`: Longer sample audio (individual student)
-- `multi-speaker-discussion.wav`: Sample for testing diarization (group of 6 speakers chatting very naturally and organically about their educational program SOURCE: Full Sail University podcast)
+CompExtractor currently uses OpenRouter as the LLM provider for competency analysis. The default model is `anthropic/claude-3.7-sonnet`, but this can be changed in your .env file.
 
-To test:
-1. Activate your virtual environment.
-2. Run: `python src/main_combined.py`
-3. When prompted, enter:
-   - Audio file: `test.wav`, `longer_test.wav`, or `multi-speaker-discussion.wav`
-   - Competencies file: `test.txt`
-   - Sound file: `sound.mp3`
-4. Choose the extraction mode (insights, data, or both)
+### Using Alternative LLM Providers
 
-## Additional Features
+The code can be modified to use other LLM providers by:
 
-- **Large File Handling**: Automatically splits large audio files into smaller chunks for processing.
-- **Multi-Speaker Support**: Identifies different speakers and provides speaker-specific analysis.
-- **Automatic Report Opening**: The generated report automatically opens in your default web browser for immediate viewing.
+1. Updating the `extract_competency_insights` function in `src/main.py`
+2. Modifying the API endpoint, headers, and request format to match your preferred provider
+3. Updating the environment variables accordingly
 
-## Notes and Recommendations
+For example, to use Amazon Bedrock directly instead of OpenRouter, you would need to:
+- Change the API endpoint to Amazon Bedrock's endpoint
+- Update the authentication method to use AWS credentials
+- Adjust the request format to match Amazon Bedrock's API requirements
+- Configure the appropriate region and service settings
 
-As this is an early prototype, we encourage experimentation and welcome your feedback:
+## System Requirements
 
-- Customize system prompts in script files to suit specific needs.
-- Experiment with different ways of querying the competencies file.
-- Change LLMs by editing your environment. Recommended:
-  ```
-  anthropic/claude-3.5-sonnet
-  ```
-  or
-  ```
-  cohere/command-r-plus-08-2024
-  ```
+- Python 3.11+ (tested on 3.11.11)
+- FFmpeg (for audio processing)
+- Internet connection (for diarization and competency analysis)
 
-## Future Improvements
+## Troubleshooting
 
-ZoneSight is continuously evolving. As we refine this prototype, we're considering the following enhancements:
+### Speaker Diarization Issues
+- Ensure you've accepted the model terms at huggingface.co
+- Verify your Hugging Face token is correct in the .env file
+- Try running `huggingface-cli login` in your terminal
 
-- Batch processing for multiple audio files
-- User-friendly GUI
-- Improved diarization accuracy
-- Enhanced visualization options
-- Comparative analysis features for multi-speaker recordings
-- Customizable report formats for different stakeholders (various 'insights packages')
-- Refined competency extraction algorithms
-- Integration with learning management systems
-- Real-time analysis capabilities
+### Transcription Issues
+- Check that FFmpeg is installed and accessible in your PATH
+- Ensure audio files are in a supported format
+- For large files, the system will automatically split them into chunks
 
-We value your input in shaping the future of ZoneSight. If you have any ideas or encounter any issues while using this early prototype, please don't hesitate to share your feedback.
+### Portfolio Analysis Issues
+- Ensure the PDF_HOST environment variable is set correctly
+- Verify that the portfolio URL is accessible and publicly viewable
+- For CSV batch processing, ensure the CSV file has the correct column headers
+- If the HTML-to-PDF service is down, consider setting up a local service
 
-Other Ideas? \\m//
+### GUI Issues
+- Ensure all required sound files are in the root directory
+- Check that the banner.jpeg file exists for the GUI header
+- If the GUI appears cut off, try resizing the window
 
-## License
+## Author
 
-This project is licensed under a dual license: MIT License for open-source use and a prohibition on commercial use without explicit permission. Please see the LICENSE file for full details.
-
-## Important Note for Users
-
-Again, to use ZoneSight effectively for your specific needs, you'll need to create two custom files:
-
-1. **Custom Competency File**: Create a text file (e.g., `custom_competencies.txt`) that defines the competencies relevant to your context. This file should follow the format described in the [Customization](#customization) section.
-
-2. **Custom Main Combined Script**: Create a custom version of the `main_combined.py` script (e.g., `custom_main_combined.py`) in the `src` directory. This script should be tailored to your specific analysis requirements, including customized prompts and any additional processing logic you need.
-
-If your organization already uses ZoneSight, you may be able to obtain these custom files from a colleague. Otherwise, you'll need to create them based on your organization's competency framework and analysis needs.
+Created by Gus Halwani ([@fizt656](https://github.com/fizt656))
