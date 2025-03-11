@@ -1,8 +1,8 @@
-![CompExtractor Banner](banner.jpeg)
+![ZoneSight Banner](ZoneSight_banner_tpz.png)
 
-# CompExtractor - Competency Analysis Tool
+# TPZ Competency Analyzer
 
-A powerful tool that combines audio analysis and portfolio assessment to extract competency insights across multiple dimensions, combining local processing with cloud services.
+A TPZ-specific adaptation that combines ZoneSight and Portfolio Analyzer to extract competency insights across 14 key TPZ dimensions, combining local processing with cloud services.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -24,7 +24,7 @@ A powerful tool that combines audio analysis and portfolio assessment to extract
 
 ## Overview
 
-CompExtractor analyzes both audio recordings and portfolios to extract competency insights, providing detailed reports on key competency dimensions. The tool combines local processing with cloud services:
+ZoneSight analyzes both audio recordings and student portfolios to extract competency insights, providing detailed reports on 14 key competency dimensions. The tool combines local processing with cloud services:
 
 - For audio analysis: Local transcription with cloud-based speaker diarization and competency analysis
 - For portfolio analysis: Web page conversion to PDF and cloud-based competency analysis
@@ -54,22 +54,86 @@ CompExtractor analyzes both audio recordings and portfolios to extract competenc
 
 ## Features
 
-Analyzes key competencies across three levels:
+Analyzes 14 key competencies (see full definitions and RDs in test_full.rtf in working folder, or consult TPZ documentation):
+1. Sense of Belonging - Feeling connected to a learning community
+2. Growth Mindset - Belief that abilities can grow with effort
+3. STEAM Interest - Exploration of identity through STEAM
+4. Creativity - Ability to generate and adapt ideas
+5. Communication - Clear exchange of information
+6. Teamwork - Cooperative work with diverse peers
+7. Adaptability - Adjusting to change and uncertainty
+8. Problem-Solving - Identifying and solving challenges
+9. STEAM Agency - Capability with STEAM tools
+10. Self-Efficacy - Confidence in ability to succeed
+11. Persistence - Sustaining effort through challenges
+12. Opportunity Recognition - Identifying learning opportunities
+13. Continuous Learning - Ongoing skill development
+14. Social Capital - Building and leveraging connections
+
+Each competency is evaluated on a 1-10 scale across three levels:
 - Emerging (1-3)
 - Developing (4-7)
 - Proficient (8-10)
 
-The competency framework is customizable through RTF files, allowing you to define your own competency dimensions and criteria.
+## Quick Start
+
+1. Ensure you have **Python 3.11+** installed (tested with Python 3.11.11)
+2. Clone the repository
+3. Set up a virtual environment and install dependencies:
+   ```bash
+   # Create a virtual environment
+   python3.11 -m venv venv
+   
+   # Activate the virtual environment
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   ```
+4. Create a `.env` file with your API keys (see Environment Variables section)
+5. Run the GUI: `python src/zonesight_gui.py`
 
 ## Installation
 
-1. Clone the repository
-2. Install dependencies:
+### Prerequisites
+- **Python 3.11+** (specifically tested with Python 3.11.11)
+- FFmpeg (for audio processing)
+- Internet connection (for API services)
+- GPU recommended but not required (for faster transcription)
+
+### Step-by-Step Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/zonesight.git
+   cd zonesight
+   ```
+
+2. Create and activate a virtual environment:
+   ```bash
+   # Create a virtual environment
+   python3.11 -m venv venv
+   
+   # Activate the virtual environment
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
+   ```
+
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
+   
+   Note: On some systems, you may need to install additional system packages for certain dependencies:
+   - For pygame on Linux: `sudo apt-get install python3-pygame`
+   - For tk on Linux: `sudo apt-get install python3-tk`
 
-3. Required environment variables (.env):
+4. Create a `.env` file in the root directory with the following environment variables:
    ```
    # For Competency Analysis (OpenRouter)
    OPENROUTER_API_KEY=your_key_here
@@ -83,26 +147,35 @@ The competency framework is customizable through RTF files, allowing you to defi
    PDF_HOST=https://html2pdf-u707.onrender.com
    ```
 
-4. Required sound files (in root directory):
+5. Ensure required sound files are in the root directory:
    - sound.mp3 (completion sound)
    - coin.mp3 (progress indicator)
+   - In the Zone.mp3 (background music)
+   - ZoneSight_banner_tpz.png (for GUI header)
+
+### Obtaining API Keys
+
+- **OpenRouter API Key**: Sign up at [openrouter.ai](https://openrouter.ai) and create an API key
+- **Hugging Face Token**: Create an account at [huggingface.co](https://huggingface.co), then generate a token in your account settings
+  - You'll also need to accept the terms for the pyannote/speaker-diarization model at [huggingface.co/pyannote/speaker-diarization](https://huggingface.co/pyannote/speaker-diarization)
 
 ## Usage
 
 ### GUI Version
 ```bash
-python src/compextractor_gui.py
+python src/zonesight_gui.py
 ```
 
 The GUI provides a landing page with three options:
 - **Audio Reflection** - For analyzing audio recordings
-- **Portfolio** - For analyzing portfolios
+- **Portfolio** - For analyzing student portfolios
 - **Video Performance of Learning** - Placeholder for future implementation
 
 #### Audio Reflection Interface
 - Simplified audio file selection showing file count and names
 - Competency file selection (RTF/TXT)
 - Optional speaker diarization
+- Background music toggle (disabled by default)
 - Output format selection:
   - Full Report (HTML with narrative and ratings)
   - Structured JSON (machine-readable format)
@@ -116,6 +189,7 @@ The GUI provides a landing page with three options:
 - Portfolio section selection:
   - Beginner, Intermediate, Advanced skill levels
   - Business and Resume sections
+- Background music toggle (disabled by default)
 - Output format selection (same options as Audio Reflection)
 - Progress tracking
 - Automatic report generation for each portfolio
@@ -159,7 +233,7 @@ The tool generates different outputs depending on the analysis type:
 
 ## LLM Provider
 
-CompExtractor currently uses OpenRouter as the LLM provider for competency analysis. The default model is `anthropic/claude-3.7-sonnet`, but this can be changed in your .env file.
+ZoneSight currently uses OpenRouter as the LLM provider for competency analysis. The default model is `anthropic/claude-3.7-sonnet`, but this can be changed in your .env file.
 
 ### Using Alternative LLM Providers
 
@@ -177,11 +251,24 @@ For example, to use Amazon Bedrock directly instead of OpenRouter, you would nee
 
 ## System Requirements
 
-- Python 3.11+ (tested on 3.11.11)
+- **Python 3.11+** (specifically tested with Python 3.11.11)
 - FFmpeg (for audio processing)
 - Internet connection (for diarization and competency analysis)
+- Disk space: ~2GB for model files and dependencies
+- Memory: At least 4GB RAM recommended (8GB+ for larger audio files)
+- GPU: Optional but recommended for faster transcription
 
 ## Troubleshooting
+
+### Virtual Environment Issues
+- If you encounter issues with the virtual environment, try creating it with the specific Python version:
+  ```bash
+  python3.11 -m venv venv
+  ```
+- On Windows, you may need to enable script execution:
+  ```powershell
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+  ```
 
 ### Speaker Diarization Issues
 - Ensure you've accepted the model terms at huggingface.co
@@ -201,9 +288,14 @@ For example, to use Amazon Bedrock directly instead of OpenRouter, you would nee
 
 ### GUI Issues
 - Ensure all required sound files are in the root directory
-- Check that the banner.jpeg file exists for the GUI header
+- Check that the ZoneSight_banner_tpz.png file exists for the GUI header
 - If the GUI appears cut off, try resizing the window
 
-## Author
+## Authors and Credits
 
-Created by Gus Halwani ([@fizt656](https://github.com/fizt656))
+This project combines and adapts two separate tools for TPZ-specific use:
+
+- **Audio Reflection Module and Overall Architecture**: Adapted from CompExtractor by Gus Halwani ([@fizt656](https://github.com/fizt656))
+- **Portfolio Analysis Module**: Created by Miles Baird ([@kilometers](https://github.com/kilometers/zs-portfolio))
+
+The original competency extractor project is maintained separately by Gus Halwani and is available under its own licensing terms for deployment across a range of contexts. This TPZ-specific adaptation integrates both tools and adds TPZ competency-based learning frameworks and reporting dimensions.

@@ -23,10 +23,10 @@ ACCENT_COLOR = "#E74C3C"  # Red accent
 BACKGROUND_COLOR = "#ECF0F1"  # Light gray background
 TEXT_COLOR = "#2C3E50"  # Dark blue text
 
-class CompExtractorApp:
+class ZoneSightApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("CompExtractor - Competency Analysis Tool")
+        self.root.title("ZoneSight - Competency Analysis Tool")
         self.root.geometry("780x850")  # Width matches banner width, height ensures all elements are visible
         
         # Center window on screen
@@ -80,9 +80,9 @@ class CompExtractorApp:
         
         # Configure common styles
         style.configure('TFrame', background=BACKGROUND_COLOR)
-        style.configure('TLabel', background=BACKGROUND_COLOR, foreground=TEXT_COLOR)
+        style.configure('TLabel', background=BACKGROUND_COLOR, foreground=SECONDARY_COLOR)
         style.configure('TButton', padding=5, background=PRIMARY_COLOR, foreground='white')
-        style.configure('TCheckbutton', padding=5, background=BACKGROUND_COLOR)
+        style.configure('TCheckbutton', padding=5, background=BACKGROUND_COLOR, foreground=SECONDARY_COLOR)
         style.configure('TEntry', fieldbackground='white')
         
         # Create a custom style for the Start button
@@ -114,7 +114,7 @@ class LandingPage(ttk.Frame):
         # Add banner image
         try:
             # Load and resize banner image
-            banner_img = Image.open('banner.jpeg')
+            banner_img = Image.open('ZoneSight_banner_tpz.png')
             # Calculate aspect ratio
             aspect_ratio = banner_img.width / banner_img.height
             new_width = 780  # Slightly less than window width
@@ -132,7 +132,7 @@ class LandingPage(ttk.Frame):
         # Welcome message
         welcome_label = ttk.Label(
             self, 
-            text="Welcome to CompExtractor! What would you like to analyze today?",
+            text="Ah, looks like you're interested in jammin' on some data! What are you analyzing today?",
             font=('Arial', 14),
             foreground=SECONDARY_COLOR,  # Use secondary color for welcome text
             wraplength=780
@@ -192,7 +192,7 @@ class AudioReflectionPage(ttk.Frame):
         # Add banner image
         try:
             # Load and resize banner image
-            banner_img = Image.open('banner.jpeg')
+            banner_img = Image.open('ZoneSight_banner_tpz.png')
             # Calculate aspect ratio
             aspect_ratio = banner_img.width / banner_img.height
             new_width = 780  # Slightly less than window width
@@ -257,12 +257,17 @@ class AudioReflectionPage(ttk.Frame):
         ttk.Checkbutton(options_frame, text="Perform Speaker Diarization", 
                        variable=self.perform_diarization).grid(row=0, column=0, sticky=tk.W, padx=10, pady=5)
         
+        # Music toggle
+        self.play_music = tk.BooleanVar(value=False)
+        ttk.Checkbutton(options_frame, text="Play TPZ Theme Music", 
+                       variable=self.play_music).grid(row=0, column=1, sticky=tk.W, padx=10, pady=5)
+        
         # Output type dropdown
-        ttk.Label(options_frame, text="Output Type:").grid(row=0, column=1, sticky=tk.W, padx=10, pady=5)
+        ttk.Label(options_frame, text="Output Type:").grid(row=1, column=0, sticky=tk.W, padx=10, pady=5)
         self.output_type = tk.StringVar(value="Full Report")
         output_dropdown = ttk.Combobox(options_frame, textvariable=self.output_type, state="readonly")
         output_dropdown['values'] = ("Full Report", "Structured JSON", "Both")
-        output_dropdown.grid(row=0, column=2, sticky=tk.W, padx=10, pady=5)
+        output_dropdown.grid(row=1, column=1, sticky=tk.W, padx=10, pady=5)
         
         # Start button - moved up and made more prominent
         self.start_button = ttk.Button(main_frame, text="Start Analysis", command=self.start_analysis, style='Start.TButton')
@@ -337,8 +342,11 @@ class AudioReflectionPage(ttk.Frame):
         timestamp = datetime.now().strftime("%H:%M:%S")
         formatted_message = f"[{timestamp}] {message}"
         
-        # Update status message
-        self.status_message.configure(text=formatted_message)
+        # Always use SECONDARY_COLOR for text
+        text_color = SECONDARY_COLOR  # Light blue
+        
+        # Update status message with new color
+        self.status_message.configure(text=formatted_message, foreground=text_color)
         
         # Update status indicator color
         indicator_color = "green"
@@ -532,7 +540,7 @@ class PortfolioPage(ttk.Frame):
         # Add banner image
         try:
             # Load and resize banner image
-            banner_img = Image.open('banner.jpeg')
+            banner_img = Image.open('ZoneSight_banner_tpz.png')
             # Calculate aspect ratio
             aspect_ratio = banner_img.width / banner_img.height
             new_width = 780  # Slightly less than window width
@@ -562,7 +570,7 @@ class PortfolioPage(ttk.Frame):
         
         # Portfolio URL input
         ttk.Label(main_frame, text="Portfolio URL:").grid(row=start_row, column=0, sticky=tk.W, pady=5)
-        self.portfolio_url = tk.StringVar(value="https://sites.google.com/")
+        self.portfolio_url = tk.StringVar(value="https://sites.google.com/possiblezone.org/")
         ttk.Entry(main_frame, textvariable=self.portfolio_url, width=60).grid(row=start_row, column=1, columnspan=2, padx=5, sticky=tk.W)
         
         # CSV file selection
@@ -620,12 +628,17 @@ class PortfolioPage(ttk.Frame):
         options_frame = ttk.LabelFrame(main_frame, text="Analysis Options")
         options_frame.grid(row=start_row+4, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=10, padx=5)
         
+        # Music toggle
+        self.play_music = tk.BooleanVar(value=False)
+        ttk.Checkbutton(options_frame, text="Play TPZ Theme Music", 
+                       variable=self.play_music).grid(row=0, column=0, sticky=tk.W, padx=10, pady=5)
+        
         # Output type dropdown
-        ttk.Label(options_frame, text="Output Type:").grid(row=0, column=0, sticky=tk.W, padx=10, pady=5)
+        ttk.Label(options_frame, text="Output Type:").grid(row=0, column=1, sticky=tk.W, padx=10, pady=5)
         self.output_type = tk.StringVar(value="Full Report")
         output_dropdown = ttk.Combobox(options_frame, textvariable=self.output_type, state="readonly")
         output_dropdown['values'] = ("Full Report", "Structured JSON", "Both")
-        output_dropdown.grid(row=0, column=1, sticky=tk.W, padx=10, pady=5)
+        output_dropdown.grid(row=0, column=2, sticky=tk.W, padx=10, pady=5)
         
         # Start button
         self.start_button = ttk.Button(main_frame, text="Start Analysis", command=self.start_analysis, style='Start.TButton')
@@ -676,8 +689,11 @@ class PortfolioPage(ttk.Frame):
         timestamp = datetime.now().strftime("%H:%M:%S")
         formatted_message = f"[{timestamp}] {message}"
         
-        # Update status message
-        self.status_message.configure(text=formatted_message)
+        # Always use SECONDARY_COLOR for text
+        text_color = SECONDARY_COLOR  # Light blue
+        
+        # Update status message with new color
+        self.status_message.configure(text=formatted_message, foreground=text_color)
         
         # Update status indicator color
         indicator_color = "green"
@@ -913,7 +929,7 @@ class PortfolioPage(ttk.Frame):
 
 def main():
     root = tk.Tk()  # Use standard Tk instead of ThemedTk
-    app = CompExtractorApp(root)
+    app = ZoneSightApp(root)
     root.mainloop()
 
 if __name__ == "__main__":

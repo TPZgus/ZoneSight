@@ -1,5 +1,7 @@
-pyannote.audio
-torch
+# Python 3.11+ required (tested with Python 3.11.11)
+# Core dependencies
+pyannote.audio==3.1.1
+torch==2.1.2
 numpy==1.23.5
 scipy==1.10.1
 soundfile==0.12.1
@@ -12,7 +14,8 @@ playsound==1.2.2
 matplotlib==3.7.1
 plotly==5.14.1
 pygame==2.5.2
-striprtf
-tk
-openai-whisper
-pillow  # Added for banner image in GUI
+striprtf==0.0.26
+tk==0.1.0
+openai-whisper==20231117
+pillow==10.2.0  # For banner image in GUI
+pandas==2.1.4  # For CSV processing in portfolio analysis

@@ -1,8 +1,9 @@
-# CompExtractor License
+# ZoneSight License 
 
 Dual License: MIT License for Open Source Use and Commercial Use Prohibition
 
-Copyright (c) 2024 Gus Halwani
+Original Work Copyright (c) 2024 Gus Halwani
+TPZ-specific Adaptation Copyright (c) 2024 The Possible Zone
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +24,10 @@ furnished to do so, subject to the following conditions:
 3. To request permission for commercial use, please contact Gus Halwani:
    https://www.linkedin.com/in/gushalwani/
 
+4. Attribution requirement: Any use, distribution, or modification of this TPZ-specific
+   adaptation must acknowledge both the original work by Gus Halwani and the TPZ-specific
+   adaptations.
+
 For non-commercial, open-source use:
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -31,6 +36,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## TPZ-specific Adaptation
+
+This software is a TPZ-specific adaptation of the original CompExtractor tool created by Gus Halwani.
+The adaptation includes TPZ competency-based learning frameworks and reporting dimensions.
 
 ## Portfolio Analysis Module
 
