@@ -10,10 +10,12 @@ A TPZ-specific adaptation that combines ZoneSight and Portfolio Analyzer to extr
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [GUI Version](#gui-version)
-    - [Audio Reflection Interface](#audio-reflection-interface)
-    - [Portfolio Interface](#portfolio-interface)
-  - [Command Line Version](#command-line-version)
+  - [Running ZoneSight: Three Approaches](#running-zonesight-three-approaches)
+    - [1. GUI Version](#1-gui-version-zonesight_guipy)
+      - [Audio Reflection Interface](#audio-reflection-interface)
+      - [Portfolio Interface](#portfolio-interface)
+    - [2. Interactive Command Line](#2-interactive-command-line-mainpy)
+    - [3. JAM Command](#3-jam-command-advanced-cli)
 - [Output](#output)
   - [Audio Analysis Output](#audio-analysis-output)
   - [Portfolio Analysis Output](#portfolio-analysis-output)
@@ -161,10 +163,25 @@ Each competency is evaluated on a 1-10 scale across three levels:
 
 ## Usage
 
-### GUI Version
+## Running ZoneSight: Three Approaches
+
+ZoneSight offers three different ways to run the application, each with its own advantages. Choose the approach that best fits your workflow and requirements.
+
+### 1. GUI Version (zonesight_gui.py)
+
 ```bash
 python src/zonesight_gui.py
 ```
+
+**When to use:** For interactive, user-friendly analysis with visual feedback.
+
+**Advantages:**
+- Intuitive graphical interface with visual progress tracking
+- Easy file selection via browse dialogs
+- Interactive settings and options
+- Real-time status updates and progress indicators
+- Ability to switch between analysis types without restarting
+- Visual representation of the analysis process
 
 The GUI provides a landing page with three options:
 - **Audio Reflection** - For analyzing audio recordings
@@ -194,9 +211,84 @@ The GUI provides a landing page with three options:
 - Progress tracking
 - Automatic report generation for each portfolio
 
-### Command Line Version
+### 2. Interactive Command Line (main.py)
+
 ```bash
 python src/main.py
+```
+
+**When to use:** For simple, guided analysis through terminal prompts.
+
+**Advantages:**
+- Step-by-step guided process with clear prompts
+- Lightweight and works in terminal-only environments
+- Simpler for single-file processing
+- Minimal dependencies for the interface
+- Useful for direct interaction without a GUI
+- Colorful terminal output with progress indicators
+
+This mode walks you through the analysis process with interactive prompts:
+1. Asks for the audio file path
+2. Prompts for the competency file path
+3. Asks if you want to perform diarization
+4. Processes the audio and generates reports
+5. Provides colorful terminal output with progress updates
+
+### 3. JAM Command (Advanced CLI)
+
+```bash
+# Using the JAM script directly
+./JAM --type a --output both --diarization audio_file.mp3
+
+# Or using the Python script
+python src/jam.py --type a --output both --diarization audio_file.mp3
+```
+
+**When to use:** For batch processing, automation, and integration with other tools.
+
+**Advantages:**
+- Powerful batch processing capabilities
+- Scriptable for automation and integration
+- CSV input support for bulk analysis
+- Flexible command-line arguments
+- Perfect for integration with other tools and workflows
+- Ideal for scheduled tasks and automated processing
+
+The JAM command provides a comprehensive command-line interface with various options:
+
+**Required arguments:**
+- `--type` or `-t`: Type of analysis to perform
+  - `a` or `audio`: Audio reflection analysis
+  - `p` or `portfolio`: Portfolio analysis
+  - `v` or `video`: Video performance analysis (placeholder)
+
+**Optional arguments:**
+- `--output` or `-o`: Output format (default: both)
+  - `json`: Generate JSON output only
+  - `html`: Generate HTML report only
+  - `both`: Generate both formats
+- `--competency` or `-c`: Path to competency file (default: test_full.rtf)
+- `--diarization` or `-d`: Enable speaker diarization for audio (flag)
+- `--csv`: CSV file containing input files or URLs (one per line)
+
+**Examples:**
+```bash
+# Analyze audio with diarization, output both formats
+./JAM --type a --output both --diarization audio_file.mp3
+
+# Analyze multiple audio files
+./JAM --type a audio1.mp3 audio2.mp3 audio3.mp3
+
+# Analyze portfolio with custom competency file
+./JAM --type p --competency custom_competencies.rtf https://portfolio-url.com
+
+# Analyze inputs from a CSV file
+./JAM --type a --csv inputs.csv
+```
+
+For full help and options:
+```bash
+./JAM --help
 ```
 
 ## Output

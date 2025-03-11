@@ -1,0 +1,9 @@
+#!/bin/bash
+# JAM - Command-line interface for ZoneSight
+# Author: Gus Halwani (https://github.com/fizt656)
+
+# Get the directory of this script
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Call the Python script with all arguments passed through
+python "$SCRIPT_DIR/src/jam.py" "$@"
