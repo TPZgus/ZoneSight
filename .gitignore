@@ -30,11 +30,6 @@ temp/
 *.mov
 *.MOV
 *.wav
-ian.MOV
-izzy.mov
-jessica.MOV
-yari.mov
 
 # Large library files
-tpz/lib/python3.11/site-packages/torch/lib/libtorch_cpu.dylib
-tpz/lib/python3.11/site-packages/llvmlite/binding/libllvmlite.dylib
+*.dylib
