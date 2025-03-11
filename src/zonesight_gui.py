@@ -1,6 +1,14 @@
 # Author:
 # - Gus Halwani (https://github.com/fizt656) 
 
+# Suppress pygame welcome message
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "1"
+
+# Suppress torchaudio deprecation warning
+import warnings
+warnings.filterwarnings("ignore", message="torchaudio._backend.set_audio_backend has been deprecated")
+
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import os
@@ -38,6 +46,9 @@ class ZoneSightApp:
         # Create main container frame
         self.main_container = ttk.Frame(root)
         self.main_container.pack(fill=tk.BOTH, expand=True)
+        
+        # Make window appear as the main window
+        self.root.after(100, self.make_window_active)
         
         # Initialize frames dictionary
         self.frames = {}
@@ -96,6 +107,23 @@ class ZoneSightApp:
                        font=('Arial', 12, 'bold'),
                        padding=15,
                        background=SECONDARY_COLOR)  # Secondary color for landing buttons
+    
+    def make_window_active(self):
+        """Make the window active and bring it to the front"""
+        # Bring window to front
+        self.root.lift()
+        # Give window focus
+        self.root.focus_force()
+        # Make window topmost to ensure it's at the front
+        self.root.attributes('-topmost', True)
+        # Deiconify in case it was minimized
+        self.root.deiconify()
+        # Update the window to process the above commands
+        self.root.update()
+        # After a short delay, set topmost to false so other windows can go in front if needed
+        self.root.after(1000, lambda: self.root.attributes('-topmost', False))
+        # Force focus again after a short delay
+        self.root.after(1100, self.root.focus_force)
     
     def show_frame(self, frame_name):
         """Show the specified frame"""
@@ -928,6 +956,13 @@ class PortfolioPage(ttk.Frame):
 
 
 def main():
+    # Print TPZ Data Jam startup message
+    print(f"{Fore.CYAN}╔═══════════════════════════════════════════════════════════╗{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}║{Style.RESET_ALL} {Fore.YELLOW}🎵 TPZ Data Jam Session Starting... 🎵{Style.RESET_ALL}{' ' * 21}{Fore.CYAN}║{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}║{Style.RESET_ALL} {Fore.MAGENTA}Mixing insights from your audio reflections and portfolios{Style.RESET_ALL} {Fore.CYAN}║{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}║{Style.RESET_ALL} {Fore.GREEN}ZoneSight UI window should now be open on your computer{Style.RESET_ALL}{' ' * 8}{Fore.CYAN}║{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}╚═══════════════════════════════════════════════════════════╝{Style.RESET_ALL}")
+    
     root = tk.Tk()  # Use standard Tk instead of ThemedTk
     app = ZoneSightApp(root)
     root.mainloop()

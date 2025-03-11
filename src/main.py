@@ -1,3 +1,7 @@
+# Suppress torchaudio deprecation warning
+import warnings
+warnings.filterwarnings("ignore", message="torchaudio._backend.set_audio_backend has been deprecated")
+
 import whisper  # Import the open source whisper package
 from pyannote.audio import Pipeline
 import requests
