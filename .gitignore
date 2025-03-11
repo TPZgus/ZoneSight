@@ -6,6 +6,7 @@ __pycache__/
 # Virtual environment
 venv/
 env/
+tpz/
 
 # Environment variables
 .env
@@ -20,6 +21,20 @@ Thumbs.db
 
 # Output files
 results/
+temp/
 
 # Temporary audio chunks
 *_chunk_*.wav
+
+# Large media files
+*.mov
+*.MOV
+*.wav
+ian.MOV
+izzy.mov
+jessica.MOV
+yari.mov
+
+# Large library files
+tpz/lib/python3.11/site-packages/torch/lib/libtorch_cpu.dylib
+tpz/lib/python3.11/site-packages/llvmlite/binding/libllvmlite.dylib
