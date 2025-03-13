@@ -319,8 +319,6 @@ The tool generates different outputs depending on the analysis type:
    - Can be integrated with research and evaluation tools
    - Adaptable for custom data processing workflows
 
-<img src="example_radar_chart.png" alt="Radar Chart Visualization" width="500"/>
-
 ### Portfolio Analysis Output
 1. HTML report with:
    - Competency ratings (1-10 scale)
