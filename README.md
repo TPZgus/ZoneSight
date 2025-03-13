@@ -310,9 +310,16 @@ The tool generates different outputs depending on the analysis type:
    - Evidence for each rating
    - Interactive radar charts for competency visualization
    - Separate sections for each speaker (if diarization enabled)
-3. Optional structured JSON output
 
-<img src="competency_analysis.png" alt="Competency Analysis Report" width="600"/>
+<img src="report-example_screenshot.png" alt="Example HTML Report" width="600"/>
+
+3. Structured JSON output:
+   - Machine-readable format for data analysis
+   - Contains all competency ratings and evidence
+   - Can be integrated with research and evaluation tools
+   - Adaptable for custom data processing workflows
+
+<img src="example_radar_chart.png" alt="Radar Chart Visualization" width="500"/>
 
 ### Portfolio Analysis Output
 1. HTML report with:
@@ -321,7 +328,11 @@ The tool generates different outputs depending on the analysis type:
    - Areas for improvement
    - Interactive radar charts for competency visualization
    - Examples from the portfolio
-2. Optional structured JSON output
+2. Structured JSON output:
+   - Machine-readable format for data analysis
+   - Contains all competency ratings and evidence
+   - Can be integrated with research and evaluation tools
+   - Adaptable for custom data processing workflows
 
 ### Directory Structure
 - `results/` - Contains all output files
