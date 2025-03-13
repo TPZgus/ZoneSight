@@ -28,6 +28,8 @@ A TPZ-specific adaptation that combines ZoneSight and Portfolio Analyzer to extr
 
 ZoneSight analyzes both audio recordings and student portfolios to extract competency insights, providing detailed reports on 14 key competency dimensions. The tool combines local processing with cloud services:
 
+<img src="general_screen.png" alt="ZoneSight Main Interface" width="600"/>
+
 - For audio analysis: Local transcription with cloud-based speaker diarization and competency analysis
 - For portfolio analysis: Web page conversion to PDF and cloud-based competency analysis
 
@@ -189,6 +191,9 @@ The GUI provides a landing page with three options:
 - **Video Performance of Learning** - Placeholder for future implementation
 
 #### Audio Reflection Interface
+
+<img src="audio_screen.png" alt="Audio Reflection Interface" width="500"/>
+
 - Simplified audio file selection showing file count and names
 - Competency file selection (RTF/TXT)
 - Optional speaker diarization
@@ -201,6 +206,9 @@ The GUI provides a landing page with three options:
 - Automatic report generation for each audio file
 
 #### Portfolio Interface
+
+<img src="portfolio_screen.png" alt="Portfolio Analysis Interface" width="500"/>
+
 - Direct portfolio URL input for single portfolio analysis
 - CSV file upload option for batch processing multiple portfolios
 - Portfolio section selection:
@@ -303,6 +311,8 @@ The tool generates different outputs depending on the analysis type:
    - Interactive radar charts for competency visualization
    - Separate sections for each speaker (if diarization enabled)
 3. Optional structured JSON output
+
+<img src="competency_analysis.png" alt="Competency Analysis Report" width="600"/>
 
 ### Portfolio Analysis Output
 1. HTML report with:
