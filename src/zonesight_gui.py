@@ -9,6 +9,9 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "1"
 import warnings
 warnings.filterwarnings("ignore", message="torchaudio._backend.set_audio_backend has been deprecated")
 
+# Note: On macOS, pyobjc-framework-Cocoa is required for AppKit module
+# which is used by some audio processing libraries
+
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import os

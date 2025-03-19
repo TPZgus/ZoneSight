@@ -19,3 +19,4 @@ tk==0.1.0
 openai-whisper==20231117
 pillow==10.2.0  # For banner image in GUI
 pandas==2.1.4  # For CSV processing in portfolio analysis
+pyobjc-framework-Cocoa==9.2  # For macOS AppKit module

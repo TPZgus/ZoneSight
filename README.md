@@ -366,6 +366,7 @@ For example, to use Amazon Bedrock directly instead of OpenRouter, you would nee
 - Disk space: ~2GB for model files and dependencies
 - Memory: At least 4GB RAM recommended (8GB+ for larger audio files)
 - GPU: Optional but recommended for faster transcription
+- **macOS-specific**: pyobjc-framework-Cocoa package for AppKit module (automatically installed via requirements.txt)
 
 ## Troubleshooting
 
@@ -399,6 +400,14 @@ For example, to use Amazon Bedrock directly instead of OpenRouter, you would nee
 - Ensure all required sound files are in the root directory
 - Check that the ZoneSight_banner_tpz.png file exists for the GUI header
 - If the GUI appears cut off, try resizing the window
+
+### macOS-Specific Issues
+- If you encounter a "No module named 'AppKit'" error, ensure you have the pyobjc-framework-Cocoa package installed:
+  ```bash
+  pip install pyobjc-framework-Cocoa
+  ```
+- This package provides Python bindings for macOS Objective-C frameworks and is required by some audio processing libraries
+- The package is included in requirements.txt and should be installed automatically when you run `pip install -r requirements.txt`
 
 ## Authors and Credits
 

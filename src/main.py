@@ -2,6 +2,8 @@
 import warnings
 warnings.filterwarnings("ignore", message="torchaudio._backend.set_audio_backend has been deprecated")
 
+# Note: On macOS, pyobjc-framework-Cocoa is required for AppKit module
+# which is used by some audio processing libraries
 import whisper  # Import the open source whisper package
 from pyannote.audio import Pipeline
 import requests
