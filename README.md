@@ -110,7 +110,7 @@ Each competency is evaluated on a 1-10 scale across three levels:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/zonesight.git
+   git clone https://github.com/TPZgus/ZoneSight.git
    cd zonesight
    ```
 
