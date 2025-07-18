@@ -27,6 +27,23 @@ from playsound import playsound
 from portfolio.portfolio import get_portfolio_paths, analyze_portfolio, generate_portfolio_report, generate_structured_json as generate_portfolio_json
 from config import OPENROUTER_API_KEY, OPENROUTER_URL, OPENROUTER_MODEL
 
+# Music functions - imported from main.py functionality
+def play_background_music():
+    """Start playing background music"""
+    try:
+        mixer.init()
+        mixer.music.load('In the Zone.mp3')
+        mixer.music.play(-1)  # -1 means loop indefinitely
+    except Exception as e:
+        print(f"Could not play background music: {e}")
+
+def stop_background_music():
+    """Stop playing background music"""
+    try:
+        mixer.music.stop()
+    except Exception as e:
+        print(f"Could not stop background music: {e}")
+
 # Define color scheme based on the new banner
 PRIMARY_COLOR = "#2C3E50"  # Dark blue
 SECONDARY_COLOR = "#3498DB"  # Light blue
@@ -435,9 +452,17 @@ class AudioReflectionPage(ttk.Frame):
         threading.Thread(target=self.run_analysis, daemon=True).start()
 
     def run_analysis(self):
+        music_playing = False
         try:
             self.log_progress("Starting batch analysis...")
             self.log_progress("Note: Using local Whisper model for transcription")
+            
+            # Start background music if enabled
+            if self.play_music.get():
+                self.log_progress("Starting background music...")
+                music_thread = threading.Thread(target=play_background_music, daemon=True)
+                music_thread.start()
+                music_playing = True
             
             # Read competency definitions (only need to do this once)
             self.log_progress("Reading competency definitions...")
@@ -515,6 +540,10 @@ class AudioReflectionPage(ttk.Frame):
                 # Add this file's reports to the overall list
                 all_reports.extend(file_reports)
 
+            # Stop background music if it was playing
+            if music_playing:
+                stop_background_music()
+            
             # Play completion sound
             playsound('sound.mp3')
             
@@ -549,6 +578,9 @@ class AudioReflectionPage(ttk.Frame):
                 messagebox.showinfo("Warning", "Batch analysis complete, but no files were generated.")
 
         except Exception as e:
+            # Stop background music if it was playing and there was an error
+            if music_playing:
+                stop_background_music()
             self.log_progress(f"Error: {str(e)}")
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         finally:
@@ -778,8 +810,16 @@ class PortfolioPage(ttk.Frame):
         threading.Thread(target=self.run_analysis, daemon=True).start()
     
     def run_analysis(self):
+        music_playing = False
         try:
             self.log_progress("Starting portfolio analysis...")
+            
+            # Start background music if enabled
+            if self.play_music.get():
+                self.log_progress("Starting background music...")
+                music_thread = threading.Thread(target=play_background_music, daemon=True)
+                music_thread.start()
+                music_playing = True
             
             # Read competency definitions
             self.log_progress("Reading competency definitions...")
@@ -868,6 +908,10 @@ class PortfolioPage(ttk.Frame):
                 # Generate reports
                 self.process_analysis_results(analysis_data, source_url, all_reports)
             
+            # Stop background music if it was playing
+            if music_playing:
+                stop_background_music()
+            
             # Handle completion
             if all_reports:
                 output_type = self.output_type.get()
@@ -899,6 +943,9 @@ class PortfolioPage(ttk.Frame):
                 messagebox.showinfo("Warning", "Portfolio analysis complete, but no files were generated.")
                 
         except Exception as e:
+            # Stop background music if it was playing and there was an error
+            if music_playing:
+                stop_background_music()
             error_msg = str(e)
             self.log_progress(f"Error: {error_msg}", Fore.RED)
             
