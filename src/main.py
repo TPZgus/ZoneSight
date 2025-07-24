@@ -488,6 +488,45 @@ def generate_combined_report(competency_data, audio_filename=None):
 
     return combined_html
 
+def run_analysis(audio_file, competency_file, perform_diarization=True):
+    """
+    Runs the full analysis pipeline.
+    """
+    # Convert audio file to WAV format if necessary
+    wav_audio_file = convert_to_wav(audio_file)
+    if not wav_audio_file:
+        return None, None
+
+    # Transcribe and diarize the audio file
+    speaker_transcripts = transcribe_and_diarize(wav_audio_file, perform_diarization)
+    if not speaker_transcripts:
+        return None, None
+
+    # Read competency definitions
+    competency_definitions = read_competency_definitions(competency_file)
+    if not competency_definitions:
+        return None, None
+
+    # Extract competency insights for each speaker
+    all_competency_data = {}
+    for speaker, transcript in speaker_transcripts.items():
+        print_colored(f"Analyzing transcript for {speaker}...", Fore.CYAN)
+        competency_data = extract_competency_insights(transcript, competency_definitions)
+        if competency_data:
+            all_competency_data[speaker] = competency_data
+
+    if not all_competency_data:
+        print_colored("No competency data was extracted.", Fore.RED)
+        return None, None
+
+    # Generate the combined report
+    combined_report = generate_combined_report(all_competency_data, audio_file)
+    
+    # Generate the structured JSON
+    structured_json = generate_structured_json(all_competency_data, audio_file)
+
+    return combined_report, structured_json
+
 def main():
     display_intro()
     
@@ -498,88 +537,30 @@ def main():
     audio_file = input(f"{Fore.YELLOW}Enter the name of the audio file: {Style.RESET_ALL}")
     competency_file = input(f"{Fore.YELLOW}Enter the name of the competencies file (TXT or RTF): {Style.RESET_ALL}")
     
-    # Ask user if they want to perform diarization
-    perform_diarization = input(f"{Fore.YELLOW}Do you want to perform diarization? (yes/no): {Style.RESET_ALL}").lower() == 'yes'
+    diarization_choice = input(f"{Fore.YELLOW}Perform speaker diarization? (yes/no): {Style.RESET_ALL}").lower()
+    perform_diarization = diarization_choice == 'yes'
 
-    if not os.path.exists(audio_file):
-        print_colored(f"Error: The audio file {audio_file} does not exist.", Fore.RED)
-        return
-    if not os.path.exists(competency_file):
-        print_colored(f"Error: The competency definition file {competency_file} does not exist.", Fore.RED)
-        return
-    if not os.path.exists('sound.mp3'):
-        print_colored(f"Error: The sound file sound.mp3 does not exist.", Fore.RED)
-        return
-    if not os.path.exists('coin.mp3'):
-        print_colored(f"Error: The sound file coin.mp3 does not exist.", Fore.RED)
-        return
-    if not os.path.exists('In the Zone.mp3'):
-        print_colored(f"Error: The sound file In the Zone.mp3 does not exist.", Fore.RED)
-        return
+    # Run the analysis
+    combined_report, structured_json = run_analysis(audio_file, competency_file, perform_diarization)
 
-    wav_file = convert_to_wav(audio_file)
-    if wav_file is None:
-        return
+    if combined_report and structured_json:
+        # Save the combined report to a file
+        report_filename = f"results/report_{os.path.splitext(os.path.basename(audio_file))[0]}.html"
+        with open(report_filename, 'w', encoding='utf-8') as file:
+            file.write(combined_report)
+        print_colored(f"Combined report saved to {report_filename}", Fore.GREEN)
 
-    print_colored(f"{'[INIT]':=^40}", Fore.CYAN)
-    print_colored("Transcribing audio..." + (" and performing diarization..." if perform_diarization else ""), Fore.CYAN)
-    print_colored(f"{'[PROCESSING]':=^40}", Fore.CYAN)
+        # Save the structured JSON to a file
+        json_filename = f"results/data_{os.path.splitext(os.path.basename(audio_file))[0]}.json"
+        with open(json_filename, 'w', encoding='utf-8') as file:
+            file.write(structured_json)
+        print_colored(f"Structured JSON data saved to {json_filename}", Fore.GREEN)
+
+    # Stop the background music
+    stop_background_music()
     
-    speaker_transcripts = transcribe_and_diarize(wav_file, perform_diarization)
-    if speaker_transcripts is None:
-        stop_background_music()
-        return
-
-    print_colored("Reading competency definitions...", Fore.CYAN)
-    competency_definitions = read_competency_definitions(competency_file)
-    if competency_definitions is None:
-        stop_background_music()
-        return
-
-    competency_data = {}
-
-    # Handle both single and multiple speaker scenarios
-    if len(speaker_transcripts) == 1 and "Speaker 1" in speaker_transcripts:
-        speaker = "Single Speaker"
-        transcript = speaker_transcripts["Speaker 1"]
-        print_colored(f"Extracting competency insights for {speaker}...", Fore.CYAN)
-        competency_data[speaker] = extract_competency_insights(transcript, competency_definitions)
-    else:
-        for speaker, transcript in speaker_transcripts.items():
-            print_colored(f"Extracting competency insights for {speaker}...", Fore.CYAN)
-            competency_data[speaker] = extract_competency_insights(transcript, competency_definitions)
-
-    print_colored("Generating combined report...", Fore.CYAN)
-    combined_report = generate_combined_report(competency_data)
-
-    print_colored("\nWriting output to results folder...", Fore.CYAN)
-    try:
-        # Create the results directory if it doesn't exist
-        os.makedirs('results', exist_ok=True)
-        
-        # Generate filename with audio file name and timestamp
-        base_filename = os.path.splitext(os.path.basename(audio_file))[0]
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_filename = f"results/combined_report_{base_filename}_{timestamp}.html"
-        
-        with open(output_filename, 'w', encoding='utf-8') as report_file:
-            report_file.write(combined_report)
-        print_colored(f"Combined report successfully written to {output_filename}", Fore.GREEN)
-        print_colored(f"To view the report with radar charts, please open the HTML file in a web browser.", Fore.YELLOW)
-
-        print_colored(f"{'[COMPLETE]':=^40}", Fore.GREEN)
-        
-        # Stop background music and play completion sound
-        stop_background_music()
-        playsound('sound.mp3')
-        print_colored("Played completion sound", Fore.GREEN)
-
-        # Clean up temporary files
-        cleanup_temp_files()
-        print_colored("Temporary files cleaned up", Fore.GREEN)
-    except Exception as e:
-        print_colored(f"Error writing output: {e}", Fore.RED)
-        stop_background_music()
+    # Clean up temporary files
+    cleanup_temp_files()
 
 if __name__ == "__main__":
     main()

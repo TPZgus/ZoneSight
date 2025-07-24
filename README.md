@@ -163,138 +163,49 @@ Each competency is evaluated on a 1-10 scale across three levels:
 
 ## Usage
 
-## Running ZoneSight: Three Approaches
+ZoneSight can be run in three ways:
 
-ZoneSight offers three different ways to run the application, each with its own advantages. Choose the approach that best fits your workflow and requirements.
+1.  **Gradio Web Interface (Recommended)**: A user-friendly, web-based interface for analyzing audio files.
+2.  **Interactive Command Line**: A text-based interface for audio analysis.
+3.  **JAM Command**: An advanced CLI for power users.
 
-### 1. GUI Version (zonesight_gui.py)
+### 1. Gradio Web Interface (`src/app.py`)
+
+This is the recommended way to use ZoneSight. The Gradio app provides a simple interface to upload your audio and competency files and view the analysis results directly in your browser.
+
+**To run the Gradio app:**
 
 ```bash
-python src/zonesight_gui.py
+python src/app.py
 ```
 
-**When to use:** For interactive, user-friendly analysis with visual feedback.
+This will start a local web server. Open the URL provided in the terminal (usually `http://127.0.0.1:7860`) to access the application.
 
-**Advantages:**
-- Intuitive graphical interface with visual progress tracking
-- Easy file selection via browse dialogs
-- Interactive settings and options
-- Real-time status updates and progress indicators
-- Ability to switch between analysis types without restarting
-- Visual representation of the analysis process
+**Features:**
+-   **File Upload**: Easily upload your audio file (e.g., WAV, MP3) and competency definition file (TXT or RTF).
+-   **Interactive Report**: View the HTML analysis report directly in an embedded iframe.
+-   **JSON Data**: Access the raw JSON output for further processing or integration.
 
-The GUI provides a landing page with three options:
-- **Audio Reflection** - For analyzing audio recordings
-- **Portfolio** - For analyzing student portfolios
-- **Video Performance of Learning** - Placeholder for future implementation
+### 2. Interactive Command Line (`src/main.py`)
 
-#### Audio Reflection Interface
+The original command-line interface is still available for audio analysis.
 
-<img src="audio_screen.png" alt="Audio Reflection Interface" width="500"/>
-
-- Simplified audio file selection showing file count and names
-- Competency file selection (RTF/TXT)
-- Optional speaker diarization
-- Background music toggle (disabled by default)
-- Output format selection:
-  - Full Report (HTML with narrative and ratings)
-  - Structured JSON (machine-readable format)
-  - Both (generates both formats)
-- Progress tracking
-- Automatic report generation for each audio file
-
-#### Portfolio Interface
-
-<img src="portfolio_screen.png" alt="Portfolio Analysis Interface" width="500"/>
-
-- Direct portfolio URL input for single portfolio analysis
-- CSV file upload option for batch processing multiple portfolios
-- Portfolio section selection:
-  - Beginner, Intermediate, Advanced skill levels
-  - Business and Resume sections
-- Background music toggle (disabled by default)
-- Output format selection (same options as Audio Reflection)
-- Progress tracking
-- Automatic report generation for each portfolio
-
-### 2. Interactive Command Line (main.py)
+**To run in interactive mode:**
 
 ```bash
 python src/main.py
 ```
 
-**When to use:** For simple, guided analysis through terminal prompts.
-
-**Advantages:**
-- Step-by-step guided process with clear prompts
-- Lightweight and works in terminal-only environments
-- Simpler for single-file processing
-- Minimal dependencies for the interface
-- Useful for direct interaction without a GUI
-- Colorful terminal output with progress indicators
-
-This mode walks you through the analysis process with interactive prompts:
-1. Asks for the audio file path
-2. Prompts for the competency file path
-3. Asks if you want to perform diarization
-4. Processes the audio and generates reports
-5. Provides colorful terminal output with progress updates
+The script will prompt you to enter the paths to your audio and competency files.
 
 ### 3. JAM Command (Advanced CLI)
 
+The `jam` command provides a streamlined, non-interactive way to run analyses, suitable for scripting and automation.
+
+**To use the JAM command:**
+
 ```bash
-# Using the JAM script directly
-./JAM --type a --output both --diarization audio_file.mp3
-
-# Or using the Python script
-python src/jam.py --type a --output both --diarization audio_file.mp3
-```
-
-**When to use:** For batch processing, automation, and integration with other tools.
-
-**Advantages:**
-- Powerful batch processing capabilities
-- Scriptable for automation and integration
-- CSV input support for bulk analysis
-- Flexible command-line arguments
-- Perfect for integration with other tools and workflows
-- Ideal for scheduled tasks and automated processing
-
-The JAM command provides a comprehensive command-line interface with various options:
-
-**Required arguments:**
-- `--type` or `-t`: Type of analysis to perform
-  - `a` or `audio`: Audio reflection analysis
-  - `p` or `portfolio`: Portfolio analysis
-  - `v` or `video`: Video performance analysis (placeholder)
-
-**Optional arguments:**
-- `--output` or `-o`: Output format (default: both)
-  - `json`: Generate JSON output only
-  - `html`: Generate HTML report only
-  - `both`: Generate both formats
-- `--competency` or `-c`: Path to competency file (default: test_full.rtf)
-- `--diarization` or `-d`: Enable speaker diarization for audio (flag)
-- `--csv`: CSV file containing input files or URLs (one per line)
-
-**Examples:**
-```bash
-# Analyze audio with diarization, output both formats
-./JAM --type a --output both --diarization audio_file.mp3
-
-# Analyze multiple audio files
-./JAM --type a audio1.mp3 audio2.mp3 audio3.mp3
-
-# Analyze portfolio with custom competency file
-./JAM --type p --competency custom_competencies.rtf https://portfolio-url.com
-
-# Analyze inputs from a CSV file
-./JAM --type a --csv inputs.csv
-```
-
-For full help and options:
-```bash
-./JAM --help
+python src/jam.py --audio <path_to_audio> --competencies <path_to_competencies>
 ```
 
 ## Output
@@ -388,32 +299,4 @@ For example, to use Amazon Bedrock directly instead of OpenRouter, you would nee
 ### Transcription Issues
 - Check that FFmpeg is installed and accessible in your PATH
 - Ensure audio files are in a supported format
-- For large files, the system will automatically split them into chunks
-
-### Portfolio Analysis Issues
-- Ensure the PDF_HOST environment variable is set correctly
-- Verify that the portfolio URL is accessible and publicly viewable
-- For CSV batch processing, ensure the CSV file has the correct column headers
-- If the HTML-to-PDF service is down, consider setting up a local service
-
-### GUI Issues
-- Ensure all required sound files are in the root directory
-- Check that the ZoneSight_banner_tpz.png file exists for the GUI header
-- If the GUI appears cut off, try resizing the window
-
-### macOS-Specific Issues
-- If you encounter a "No module named 'AppKit'" error, ensure you have the pyobjc-framework-Cocoa package installed:
-  ```bash
-  pip install pyobjc-framework-Cocoa
-  ```
-- This package provides Python bindings for macOS Objective-C frameworks and is required by some audio processing libraries
-- The package is included in requirements.txt and should be installed automatically when you run `pip install -r requirements.txt`
-
-## Authors and Credits
-
-This project combines and adapts two separate tools for TPZ-specific use:
-
-- **Audio Reflection Module and Overall Architecture**: Adapted from CompExtractor by Gus Halwani ([@fizt656](https://github.com/fizt656))
-- **Portfolio Analysis Module**: Created by Miles Baird ([@kilometers](https://github.com/kilometers/zs-portfolio))
-
-The original competency extractor project is maintained separately by Gus Halwani and is available under its own licensing terms for deployment across a range of contexts. This TPZ-specific adaptation integrates both tools and adds TPZ competency-based learning frameworks and reporting dimensions.
+- For large files, the system will automatically
