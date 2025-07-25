@@ -22,7 +22,7 @@ jobs:
         git config --global user.email "actions@github.com"
         
         # Add the organization repository as a remote
-        git remote add org https://$MIRROR_TOKEN@github.com/ThePossibleZone/Zonesight.git
+        git remote add org https://$MIRROR_TOKEN@github.com/ThePossibleZone/ZoneSight.git
         
         # Push all branches and tags to the organization repository
         git push org --all --force
